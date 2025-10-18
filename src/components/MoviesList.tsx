@@ -20,7 +20,7 @@ const MoviesList: React.FC<React.PropsWithChildren<{}>> = () => {
         <div className="bg-gray-100 p-4 sm:p-8">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">Popular Movies</h2>
             
-            {/* 💡 THE RESPONSIVE FIX IS HERE: */}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {
                     dummyMovies.map((movie) => {
@@ -33,12 +33,11 @@ const MoviesList: React.FC<React.PropsWithChildren<{}>> = () => {
                                     <img 
                                         src={movie.imageUrl} 
                                         alt={`Poster for ${movie.name}`} 
-                                        // Made the image height responsive and dynamic based on screen size
                                         className="w-full h-64 sm:h-72 object-cover" 
                                     />
                                 )}
                                 
-                                {/* Movie Title */}
+        
                                 <div className="p-3 text-center">
                                     <p className="text-sm sm:text-md font-semibold text-gray-900 truncate">
                                         {movie.name}
