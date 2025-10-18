@@ -1,12 +1,16 @@
 import AppHeader from "../components/AppHeader";
+import HomeSection from "../components/HomeSection";
 
 export function Home(){
     return (
         <>
             <AppHeader/>
-            <div className="bg-sky-400">
-                <h1 className="text-3xl font-bold underline">   Home  </h1>
-        </div>
+    
+            <HomeSection title="New Releases">
+                <p>Initial banner</p>
+            </HomeSection>
+
+            
        </>
     );
 }
