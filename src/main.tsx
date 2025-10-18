@@ -1,9 +1,8 @@
 import './index.css'
-import App from './App.tsx'
-
+import { Login } from './pages/Login.tsx';
+import { Home } from './pages/Home.tsx';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
-import { Login } from './Login.tsx';
 
 
 const root = document.getElementById("root");
@@ -11,7 +10,7 @@ const root = document.getElementById("root");
 ReactDOM.createRoot(root!).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<App />} />
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
     </Routes>
   </BrowserRouter>,
