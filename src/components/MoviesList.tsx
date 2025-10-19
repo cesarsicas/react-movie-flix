@@ -30,13 +30,13 @@ const dummyMovies: MovieModel[] = [
 
 const MoviesList: React.FC<React.PropsWithChildren<{}>> = () => {
   return (
-    <div className="bg-gray-100 p-4 sm:p-8">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+    <div className="bg-gray-100">
+      <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {dummyMovies.map((movie) => {
           return (
             <div
               key={movie.id}
-              className="transform cursor-pointer overflow-hidden rounded-lg bg-white shadow-xl transition duration-300 hover:scale-[1.02]"
+              className="w-full max-w-[250px] transform cursor-pointer overflow-hidden rounded-lg bg-white shadow-xl transition duration-300 hover:scale-[1.02]"
             >
               {movie.imageUrl && (
                 <img
