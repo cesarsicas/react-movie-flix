@@ -30,7 +30,7 @@ const dummyMovies: MovieModel[] = [
 
 const MoviesList: React.FC<React.PropsWithChildren<{}>> = () => {
   return (
-    <div className="bg-gray-100">
+    <div className="">
       <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {dummyMovies.map((movie) => {
           return (

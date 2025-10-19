@@ -3,7 +3,7 @@ import { faVideo } from "@fortawesome/free-solid-svg-icons";
 
 export default function AppHeader() {
   return (
-    <header className="grid grid-cols-3 items-center gap-4 px-16 py-4">
+    <header className="grid items-center gap-4 px-16 py-4 md:grid-cols-1 lg:grid-cols-3">
       <h1 className="text-2xl">
         <FontAwesomeIcon icon={faVideo} /> ReactFlix
       </h1>

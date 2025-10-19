@@ -1,3 +1,4 @@
+import AppFooter from "../components/AppFooter";
 import AppHeader from "../components/AppHeader";
 import HomeSection from "../components/HomeSection";
 import MoviesList from "../components/MoviesList";
@@ -20,6 +21,8 @@ export function Home() {
           <MoviesList />
         </HomeSection>
       </div>
+
+      <AppFooter />
     </>
   );
 }
