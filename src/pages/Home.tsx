@@ -1,5 +1,6 @@
 import AppFooter from "../components/AppFooter";
 import AppHeader from "../components/AppHeader";
+import Banner from "../components/Banner";
 import HomeSection from "../components/HomeSection";
 import MoviesList from "../components/MoviesList";
 
@@ -8,6 +9,7 @@ export function Home() {
     <>
       <AppHeader />
 
+      <Banner />
       <div className="px-12">
         <HomeSection title="New Releases">
           <MoviesList />
