@@ -1,6 +1,7 @@
 import React from "react";
 import { MovieModel } from "../model/MovieModel";
 import { Link } from "react-router-dom";
+import MovieItem from "./MovieItem";
 
 const dummyMovies: MovieModel[] = [
   {
@@ -56,35 +57,7 @@ const MoviesList: React.FC<React.PropsWithChildren<{}>> = () => {
         {dummyMovies.map((movie) => {
           return (
             <Link key={movie.id} to={`/movie/details/${movie.id}`}>
-              <div
-                key={movie.id}
-                className="max-w-80 transform cursor-pointer overflow-hidden rounded-md bg-white shadow-xl transition duration-300 hover:scale-[1.02]"
-              >
-                {movie.posterUrl && (
-                  <img
-                    src={movie.posterUrl}
-                    alt={`Poster for ${movie.title}`}
-                    className="h-94 w-full object-cover"
-                  />
-                )}
-
-                <div className="p-4 text-sm">
-                  <h3 className="line-clamp-2 h-14 text-base font-semibold text-gray-900">
-                    {movie.title}
-                  </h3>
-
-                  <div className="flex w-full justify-between">
-                    <div className="mb-4 rounded-b-sm bg-gray-200 px-2 py-1">
-                      {movie.genres[0]}
-                    </div>
-                    <div>{movie.year}</div>
-                  </div>
-
-                  <p className="text-xm line-clamp-2 text-ellipsis text-gray-700">
-                    {movie.description}
-                  </p>
-                </div>
-              </div>
+              <MovieItem movie={movie} />
             </Link>
           );
         })}
