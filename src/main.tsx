@@ -11,6 +11,7 @@ import {
 import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider } from "react-router-dom";
+import { Signup } from "./pages/Signup.tsx";
 
 const root = document.getElementById("root");
 
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/login", element: <Login /> },
+      { path: "/signup", element: <Signup /> },
       { path: "/movie/details/:id", element: <MovieDetails /> },
     ],
   },

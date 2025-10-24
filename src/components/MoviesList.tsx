@@ -57,7 +57,7 @@ const MoviesList: React.FC<React.PropsWithChildren<{}>> = () => {
         {dummyMovies.map((movie) => {
           return (
             <Link key={movie.id} to={`/movie/details/${movie.id}`}>
-              <MovieItem movie={movie} />
+              <MovieItem movie={movie} showBottomInfo={true} />
             </Link>
           );
         })}

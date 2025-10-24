@@ -1,12 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 export default function AppHeader() {
   return (
     <header className="grid items-center gap-4 px-16 py-4 md:grid-cols-1 lg:grid-cols-3">
-      <h1 className="text-2xl">
-        <FontAwesomeIcon icon={faVideo} /> ReactFlix
-      </h1>
+      <Link to={`/`}>
+        <h1 className="text-2xl">
+          <FontAwesomeIcon icon={faVideo} /> ReactFlix
+        </h1>
+      </Link>
       <div className="">
         <input
           type="text"
@@ -15,19 +18,19 @@ export default function AppHeader() {
         />
       </div>
       <div className="flex w-full items-center justify-end">
-        <a
+        <Link
+          to={`/login`}
           className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
-          href="#"
         >
           Login
-        </a>
+        </Link>
 
-        <a
+        <Link
+          to={`/signup`}
           className="mx-5 min-w-[120px] rounded border bg-slate-800 px-6 py-2 text-center text-white focus:outline-none"
-          href="#"
         >
           Signup
-        </a>
+        </Link>
       </div>
     </header>
   );
