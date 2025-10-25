@@ -1,5 +1,5 @@
 import "./index.css";
-import { Login } from "./pages/Login.tsx";
+import { Auth } from "./pages/Auth.tsx";
 import { Home } from "./pages/Home.tsx";
 import ReactDOM from "react-dom/client";
 import {
@@ -11,7 +11,6 @@ import {
 import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider } from "react-router-dom";
-import { Signup } from "./pages/Signup.tsx";
 
 const root = document.getElementById("root");
 
@@ -21,8 +20,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/login", element: <Login /> },
-      { path: "/signup", element: <Signup /> },
+      { path: "/auth", element: <Auth /> },
       { path: "/movie/details/:id", element: <MovieDetails /> },
     ],
   },

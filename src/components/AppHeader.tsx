@@ -19,14 +19,14 @@ export default function AppHeader() {
       </div>
       <div className="flex w-full items-center justify-end">
         <Link
-          to={`/login`}
+          to={`/auth?mode=login`}
           className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
         >
           Login
         </Link>
 
         <Link
-          to={`/signup`}
+          to={`/auth?mode=signup`}
           className="mx-5 min-w-[120px] rounded border bg-slate-800 px-6 py-2 text-center text-white hover:bg-slate-700 focus:outline-none"
         >
           Signup
