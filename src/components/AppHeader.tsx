@@ -27,7 +27,7 @@ export default function AppHeader() {
 
         <Link
           to={`/signup`}
-          className="mx-5 min-w-[120px] rounded border bg-slate-800 px-6 py-2 text-center text-white focus:outline-none"
+          className="mx-5 min-w-[120px] rounded border bg-slate-800 px-6 py-2 text-center text-white hover:bg-slate-700 focus:outline-none"
         >
           Signup
         </Link>
