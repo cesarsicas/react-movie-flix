@@ -1,73 +1,64 @@
-# React + TypeScript + Vite
+"""
+React Stream Flix
+"""
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Small movie-listing demo built with React, TypeScript, Vite and Tailwind. It demonstrates a simple movie grid, card components, routing to a details page, and responsive layout using Tailwind utilities.
 
-Currently, two official plugins are available:
+## Technologies
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React (functional components + hooks)
+- TypeScript
+- Vite (dev server + build)
+- React Router (routing / route params)
+- Tailwind CSS (utility-first styling)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Responsive movie grid with cards
+- Clickable cards that navigate to a details page (`/movie/details/:id`)
+- Truncated titles and consistent card sizing with Tailwind
+- Example data in `src/components/MoviesList.tsx` (dummy movies)
 
-## Expanding the ESLint configuration
+## Project structure (important files)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/main.tsx` — app entry, router setup
+- `src/pages/Home.tsx` — home page that renders the movie list
+- `src/components/MoviesList.tsx` — grid of movies
+- `src/components/MovieItem.tsx` — single movie card
+- `src/pages/MovieDetails.tsx` — details page (reads `:id` via `useParams`)
+- `src/model/MovieModel.tsx` — MovieModel class
+- `index.html`, `vite.config.ts`, and Tailwind config — build/dev setup
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting started (Windows PowerShell)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1. Install dependencies
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```powershell
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Start development server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```powershell
+npm run dev
 ```
+
+3. Open the app
+
+Visit http://localhost:5173 (Vite prints the exact URL in the terminal).
+
+4. Build for production
+
+```powershell
+npm run build
+```
+
+5. Preview the production build
+
+```powershell
+npm run preview
+```
+
+## License
+
+This project is provided as-is for learning and demo purposes.
