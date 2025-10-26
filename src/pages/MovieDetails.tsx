@@ -32,7 +32,7 @@ export function MovieDetails() {
           </div>
         </div>
       </Banner>
-      <div className="grid gap-2 sm:grid-cols-1 md:grid-cols-[2fr_1fr]">
+      <div className="mb-6 grid gap-2 sm:grid-cols-1 md:grid-cols-[2fr_1fr]">
         <div className="mt-6">
           <h2 className="text-2xl font-bold text-gray-800">Sinopsis</h2>
           <p className="mb-6">
@@ -41,16 +41,14 @@ export function MovieDetails() {
             every decision could mean the difference between salvation and
             destruction.
           </p>
-          <h2 className="mb-6 text-2xl font-bold text-gray-800">
-            Cast and Crew
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800">Cast and Crew</h2>
           <h3>Director</h3>
           <p>Michael Chen</p>
           <h3>Cast</h3>
           <p>John Harrison, Sarah Mitchell, David Rodriguez</p>
         </div>
 
-        <div className="mt-6 rounded-md border-2 border-solid border-gray-300 p-4">
+        <div className="mt-6 rounded-md border-1 border-solid border-gray-300 p-4">
           <h2 className="text mb-4 font-bold text-gray-800"> Movie details</h2>
 
           <div className="mb-2 flex w-full justify-between">
@@ -71,6 +69,38 @@ export function MovieDetails() {
           </div>
         </div>
       </div>
+
+      <div>
+        <h2 className="bg text-2xl font-bold text-gray-800">User Reviews</h2>
+
+        <div className="mb-4 rounded-md border-1 border-solid border-gray-300 p-4">
+          <div className="mb-2 flex items-center">
+            <span className="h-[30px] w-[30px] rounded-[15px] bg-gray-900" />
+            <div className="mx-2">
+              <p>ActionFan23</p>
+              <p className="text-xs text-gray-500">2024-09-14</p>
+            </div>
+          </div>
+          <p className="text-sm text-gray-500">
+            Solid performances and impressive cinematography.
+          </p>
+        </div>
+
+        <div className="rounded-md border-1 border-solid border-gray-300 p-4">
+          <div className="mb-2 flex items-center">
+            <span className="h-[30px] w-[30px] rounded-[15px] bg-gray-900" />
+            <div className="mx-2">
+              <p>ActionFan23</p>
+              <p className="text-xs text-gray-500">2024-09-14</p>
+            </div>
+          </div>
+          <p className="text-sm text-gray-500">
+            Solid performances and impressive cinematography.
+          </p>
+        </div>
+      </div>
+
+      <div></div>
     </PageContainer>
   );
 }
