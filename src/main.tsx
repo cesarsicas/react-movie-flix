@@ -1,5 +1,6 @@
 import "./index.css";
 import { action as formAction, Auth } from "./pages/Auth.tsx";
+import { action as logoutAction } from "./pages/Logout.tsx";
 import { Home } from "./pages/Home.tsx";
 import ReactDOM from "react-dom/client";
 import {
@@ -12,6 +13,7 @@ import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider } from "react-router-dom";
 import Profile from "./pages/Profile.tsx";
+import { tokenLoader } from "./utils/auth.tsx";
 
 const root = document.getElementById("root");
 
@@ -19,9 +21,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    id: "root",
+    loader: tokenLoader,
     children: [
       { path: "/", element: <Home /> },
       { path: "/auth", element: <Auth />, action: formAction },
+      { path: "/logout", action: logoutAction },
       { path: "/movie/details/:id", element: <MovieDetails /> },
       { path: "/profile", element: <Profile /> },
     ],

@@ -24,6 +24,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const email = formData.get("email");
   const password = formData.get("password");
 
+  // return { errors: ["Error example"] };
+
   // const response = await fetch("https://your-backend-api.com/auth/" + mode, {
   //   method: "POST",
   //   headers: {
@@ -40,6 +42,8 @@ export async function action({ request }: ActionFunctionArgs) {
   //   throw new Error("Could not authenticate user.");
   // }
 
-  //TODO implement bakcend and save returned token
+  //TODO implement backend and save returned token
+
+  localStorage.setItem("token", "123456");
   return redirect("/profile");
 }
