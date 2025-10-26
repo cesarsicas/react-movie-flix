@@ -1,6 +1,4 @@
-"""
-React Stream Flix
-"""
+# React Movie Flix
 
 Small movie-listing demo built with React, TypeScript, Vite and Tailwind. It demonstrates a simple movie grid, card components, routing to a details page, and responsive layout using Tailwind utilities.
 
