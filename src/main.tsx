@@ -1,5 +1,5 @@
 import "./index.css";
-import { Auth } from "./pages/Auth.tsx";
+import { action as formAction, Auth } from "./pages/Auth.tsx";
 import { Home } from "./pages/Home.tsx";
 import ReactDOM from "react-dom/client";
 import {
@@ -11,6 +11,7 @@ import {
 import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider } from "react-router-dom";
+import Profile from "./pages/Profile.tsx";
 
 const root = document.getElementById("root");
 
@@ -20,8 +21,9 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/auth", element: <Auth /> },
+      { path: "/auth", element: <Auth />, action: formAction },
       { path: "/movie/details/:id", element: <MovieDetails /> },
+      { path: "/profile", element: <Profile /> },
     ],
   },
 ]);
