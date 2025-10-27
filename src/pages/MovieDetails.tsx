@@ -1,12 +1,15 @@
-import { useParams } from "react-router-dom";
 import PageContainer from "../components/PageContainer";
-import movieTheater from "../assets/movie_theater2.png";
 import Banner from "../components/Banner";
-import MovieItem from "../components/MovieItem";
-import { MovieModel } from "../model/MovieModel";
+import Modal from "../components/Modal";
+import { useState } from "react";
 
 export function MovieDetails() {
-  let { id } = useParams();
+  //let { id } = useParams(); todo
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <PageContainer>
       <Banner>
@@ -32,7 +35,7 @@ export function MovieDetails() {
           </div>
         </div>
       </Banner>
-      <div className="mb-6 grid gap-2 sm:grid-cols-1 md:grid-cols-[2fr_1fr]">
+      <div className="mb-12 grid gap-2 sm:grid-cols-1 md:grid-cols-[2fr_1fr]">
         <div className="mt-6">
           <h2 className="text-2xl font-bold text-gray-800">Sinopsis</h2>
           <p className="mb-6">
@@ -70,8 +73,10 @@ export function MovieDetails() {
         </div>
       </div>
 
-      <div>
-        <h2 className="bg text-2xl font-bold text-gray-800">User Reviews</h2>
+      <div className="mb-4">
+        <h2 className="bg mb-4 text-2xl font-bold text-gray-800">
+          User Reviews
+        </h2>
 
         <div className="mb-4 rounded-md border-1 border-solid border-gray-300 p-4">
           <div className="mb-2 flex items-center">
@@ -100,7 +105,19 @@ export function MovieDetails() {
         </div>
       </div>
 
-      <div></div>
+      <Modal isOpen={isModalOpen} onClose={closeModal} title="My Awesome Modal">
+        <p>This is the content of my modal!</p>
+        <button onClick={closeModal}>Close from inside</button>
+      </Modal>
+
+      <div className="text-center">
+        <button
+          onClick={openModal}
+          className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
+        >
+          Send a review
+        </button>
+      </div>
     </PageContainer>
   );
 }
