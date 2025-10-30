@@ -25,7 +25,7 @@ const Modal: React.FC<ModalProps> = (props) => {
       onClick={props.onClose}
     >
       <div
-        className="w-full max-w-lg scale-100 transform overflow-hidden rounded-lg bg-white opacity-100 shadow-xl transition-all duration-300 ease-out"
+        className="w-full max-w-xl scale-100 transform overflow-hidden rounded-lg bg-white opacity-100 shadow-xl transition-all duration-300 ease-out"
         onClick={(e) => e.stopPropagation()}
       >
         {props.title && (

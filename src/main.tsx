@@ -1,6 +1,7 @@
 import "./index.css";
-import { action as formAction, Auth } from "./pages/Auth.tsx";
+import { action as authformAction, Auth } from "./pages/Auth.tsx";
 import { action as logoutAction } from "./pages/Logout.tsx";
+import { action as movieReviewAcion } from "./pages/MovieDetails.tsx";
 import { Home } from "./pages/Home.tsx";
 import ReactDOM from "react-dom/client";
 import {
@@ -25,9 +26,13 @@ const router = createBrowserRouter([
     loader: tokenLoader,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/auth", element: <Auth />, action: formAction },
+      { path: "/auth", element: <Auth />, action: authformAction },
       { path: "/logout", action: logoutAction },
-      { path: "/movie/details/:id", element: <MovieDetails /> },
+      {
+        path: "/movie/details/:id",
+        element: <MovieDetails />,
+        action: movieReviewAcion,
+      },
       { path: "/profile", element: <Profile /> },
     ],
   },

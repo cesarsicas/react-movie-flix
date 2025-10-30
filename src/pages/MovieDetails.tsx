@@ -1,14 +1,43 @@
 import PageContainer from "../components/PageContainer";
 import Banner from "../components/Banner";
 import Modal from "../components/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ReviewForm from "../components/ReviewForm";
+import { useActionData, type ActionFunctionArgs } from "react-router-dom";
+import ReviewModel from "../model/ReviewModel";
+import MoviewReviewItem from "../components/MovieReviewItem";
+
+type ActionData = { ok: true; review: ReviewModel } | undefined;
 
 export function MovieDetails() {
   //let { id } = useParams(); todo
+  const actionData = useActionData() as ActionData;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const [reviews, setReviews] = useState<ReviewModel[]>([]);
+
+  // Load initial reviews
+  useEffect(() => {
+    setReviews([
+      new ReviewModel(
+        "id-1",
+        "ActionFan23",
+        "Solid performances and impressive cinematography.",
+      ),
+      new ReviewModel("id-2", "ScyFyRule", "Best movie ever."),
+    ]);
+  }, []);
+
+  // Handle new review submission
+  useEffect(() => {
+    if (actionData?.ok && actionData.review) {
+      setReviews((prevReviews) => [...prevReviews, actionData.review]);
+      closeModal(); // Close modal after successful submission
+    }
+  }, [actionData]);
 
   return (
     <PageContainer>
@@ -78,36 +107,13 @@ export function MovieDetails() {
           User Reviews
         </h2>
 
-        <div className="mb-4 rounded-md border-1 border-solid border-gray-300 p-4">
-          <div className="mb-2 flex items-center">
-            <span className="h-[30px] w-[30px] rounded-[15px] bg-gray-900" />
-            <div className="mx-2">
-              <p>ActionFan23</p>
-              <p className="text-xs text-gray-500">2024-09-14</p>
-            </div>
-          </div>
-          <p className="text-sm text-gray-500">
-            Solid performances and impressive cinematography.
-          </p>
-        </div>
-
-        <div className="rounded-md border-1 border-solid border-gray-300 p-4">
-          <div className="mb-2 flex items-center">
-            <span className="h-[30px] w-[30px] rounded-[15px] bg-gray-900" />
-            <div className="mx-2">
-              <p>ActionFan23</p>
-              <p className="text-xs text-gray-500">2024-09-14</p>
-            </div>
-          </div>
-          <p className="text-sm text-gray-500">
-            Solid performances and impressive cinematography.
-          </p>
-        </div>
+        {reviews.map((movie) => {
+          return <MoviewReviewItem movie={movie} key={movie.id} />;
+        })}
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal} title="My Awesome Modal">
-        <p>This is the content of my modal!</p>
-        <button onClick={closeModal}>Close from inside</button>
+      <Modal isOpen={isModalOpen} onClose={closeModal} title="Review">
+        <ReviewForm />
       </Modal>
 
       <div className="text-center">
@@ -120,4 +126,21 @@ export function MovieDetails() {
       </div>
     </PageContainer>
   );
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const reviewText = formData.get("review") as string;
+
+  const newReview = new ReviewModel(
+    `id-${Date.now()}`,
+    "CurrentUser", // In real app, get from auth context
+    reviewText,
+  );
+
+  // TODO: In real app, make API call here
+  // const response = await fetch('/api/reviews', { method: 'POST', body: formData });
+  // if (!response.ok) throw new Error('Failed to submit review');
+
+  return { sucess: newReview };
 }
