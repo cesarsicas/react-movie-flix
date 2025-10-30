@@ -10,7 +10,6 @@ import MoviewReviewItem from "../components/MovieReviewItem";
 type ActionData = { ok: true; review: ReviewModel } | undefined;
 
 export function MovieDetails() {
-  //let { id } = useParams(); todo
   const actionData = useActionData() as ActionData;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -134,13 +133,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const newReview = new ReviewModel(
     `id-${Date.now()}`,
-    "CurrentUser", // In real app, get from auth context
+    "CurrentUser", //todo
     reviewText,
   );
 
-  // TODO: In real app, make API call here
-  // const response = await fetch('/api/reviews', { method: 'POST', body: formData });
-  // if (!response.ok) throw new Error('Failed to submit review');
+  console.log(newReview);
 
-  return { sucess: newReview };
+  // TODO: api call
+
+  return { ok: true, review: newReview };
 }
