@@ -20,13 +20,19 @@ export default function AppHeader() {
       </div>
       <div className="flex w-full items-center justify-end">
         {tokenData ? (
-          <div>
-            <Form action="/logout" method="post">
-              <button className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none">
-                Logout
-              </button>
-            </Form>
-          </div>
+          <>
+            <div>
+              <Form action="/logout" method="post">
+                <button className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none">
+                  Logout
+                </button>
+              </Form>
+            </div>
+            <Link
+              to={`/profile`}
+              className="ml-2 h-[30px] w-[30px] rounded-[15px] bg-gray-900"
+            ></Link>
+          </>
         ) : (
           <>
             <Link
