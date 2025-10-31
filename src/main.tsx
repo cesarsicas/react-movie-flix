@@ -14,7 +14,7 @@ import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider } from "react-router-dom";
 import Profile from "./pages/Profile.tsx";
-import { tokenLoader } from "./utils/auth.tsx";
+import { checkAuthLoader, tokenLoader } from "./utils/auth.tsx";
 
 const root = document.getElementById("root");
 
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         element: <MovieDetails />,
         action: movieReviewAcion,
       },
-      { path: "/profile", element: <Profile /> },
+      { path: "/profile", element: <Profile />, loader: checkAuthLoader },
     ],
   },
 ]);
