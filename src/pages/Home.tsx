@@ -1,11 +1,19 @@
-import AppFooter from "../components/AppFooter";
-import AppHeader from "../components/AppHeader";
 import Banner from "../components/Banner";
 import HomeSection from "../components/HomeSection";
 import MoviesList from "../components/MoviesList";
 import PageContainer from "../components/PageContainer";
+import { API_BASE_URL } from "../utils/Constants";
+import type MovieReleaseResponse from "../model/data/MovieReleaseResponse";
+import { MovieModel } from "../model/MovieModel";
+import { useLoaderData } from "react-router-dom";
+
+interface LoaderData {
+  releases: MovieModel[];
+}
 
 export function Home() {
+  const { releases } = useLoaderData() as LoaderData;
+
   return (
     <PageContainer>
       <Banner>
@@ -17,16 +25,44 @@ export function Home() {
         </div>
       </Banner>
       <HomeSection title="New Releases">
-        <MoviesList />
+        <MoviesList movies={releases.slice(0, 10)} />
       </HomeSection>
 
       <HomeSection title="Popular Movies">
-        <MoviesList />
+        <MoviesList movies={releases.slice(11, 20)} />
       </HomeSection>
 
       <HomeSection title="Trending">
-        <MoviesList />
+        <MoviesList movies={releases.slice(21, 30)} />
       </HomeSection>
     </PageContainer>
   );
+}
+
+export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
+  const response = await fetch(API_BASE_URL + "/movies/releases", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not fetch movies.");
+  }
+
+  const data = (await response.json()) as MovieReleaseResponse;
+
+  const model = data.releases.map((release) => {
+    return new MovieModel(
+      release.id,
+      release.title,
+      release.poster_url ?? "",
+      "Description",
+      release.source_release_date ?? "",
+      release.type,
+    );
+  });
+
+  return { releases: model };
 }

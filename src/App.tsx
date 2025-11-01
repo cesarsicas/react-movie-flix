@@ -1,7 +1,7 @@
 import { action as authformAction, Auth } from "./pages/Auth.tsx";
 import { action as logoutAction } from "./pages/Logout.tsx";
 import { action as movieReviewAcion } from "./pages/MovieDetails.tsx";
-import { Home } from "./pages/Home.tsx";
+import { Home, moviesLoader } from "./pages/Home.tsx";
 import { createBrowserRouter } from "react-router";
 import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     id: "root",
     loader: tokenLoader,
     children: [
-      { path: "/", element: <Home /> },
+      { path: "/", element: <Home />, loader: moviesLoader },
       { path: "/auth", element: <Auth />, action: authformAction },
       { path: "/logout", action: logoutAction },
       {
