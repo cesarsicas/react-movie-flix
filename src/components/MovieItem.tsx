@@ -1,4 +1,5 @@
 import type { MovieModel } from "../model/MovieModel";
+import placeholder from "../assets/poster_placeholder.png";
 
 const MovieItem: React.FC<
   React.PropsWithChildren<{ movie: MovieModel; showBottomInfo: Boolean }>
@@ -8,13 +9,11 @@ const MovieItem: React.FC<
       key={props.movie.id}
       className="w-80 transform cursor-pointer overflow-hidden rounded-md bg-white shadow-xl transition duration-300 hover:scale-[1.02]"
     >
-      {props.movie.posterUrl && (
-        <img
-          src={props.movie.posterUrl}
-          alt={`Poster for ${props.movie.title}`}
-          className="h-94 w-full object-cover"
-        />
-      )}
+      <img
+        src={props.movie.posterUrl ? props.movie.posterUrl : placeholder}
+        alt={`Poster for ${props.movie.title}`}
+        className="h-94 w-full object-cover"
+      />
 
       {props.showBottomInfo && (
         <div className="p-3 text-sm">

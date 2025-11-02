@@ -6,6 +6,8 @@ import { API_BASE_URL } from "../utils/Constants";
 import type MovieReleaseResponse from "../model/data/MovieReleaseResponse";
 import { MovieModel } from "../model/MovieModel";
 import { useLoaderData } from "react-router-dom";
+import { saveLocalReleases } from "../data/redux/releasesSlice";
+import { store } from "../data/redux/store";
 
 interface LoaderData {
   releases: MovieModel[];
@@ -40,6 +42,12 @@ export function Home() {
 }
 
 export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
+  const cachedMovies = store?.getState()?.releases?.movies;
+
+  if (cachedMovies && cachedMovies.length > 0) {
+    return { releases: cachedMovies };
+  }
+
   const response = await fetch(API_BASE_URL + "/movies/releases", {
     method: "GET",
     headers: {
@@ -63,6 +71,8 @@ export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
       release.type,
     );
   });
+
+  store.dispatch(saveLocalReleases(model));
 
   return { releases: model };
 }
