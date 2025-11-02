@@ -4,10 +4,10 @@ import MoviesList from "../components/MoviesList";
 import PageContainer from "../components/PageContainer";
 import { API_BASE_URL } from "../utils/Constants";
 import type MovieReleaseResponse from "../model/data/MovieReleaseResponse";
-import { MovieModel } from "../model/MovieModel";
 import { useLoaderData } from "react-router-dom";
 import { saveLocalReleases } from "../data/redux/releasesSlice";
 import { store } from "../data/redux/store";
+import type MovieModel from "../model/MovieModel";
 
 interface LoaderData {
   releases: MovieModel[];
@@ -42,7 +42,7 @@ export function Home() {
 }
 
 export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
-  const cachedMovies = store?.getState()?.releases?.movies;
+  const cachedMovies: MovieModel[] = store?.getState()?.releases?.movies;
 
   if (cachedMovies && cachedMovies.length > 0) {
     return { releases: cachedMovies };
@@ -62,14 +62,14 @@ export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
   const data = (await response.json()) as MovieReleaseResponse;
 
   const model = data.releases.map((release) => {
-    return new MovieModel(
-      release.id,
-      release.title,
-      release.poster_url ?? "",
-      "Description",
-      release.source_release_date ?? "",
-      release.type,
-    );
+    return {
+      id: release.id,
+      title: release.title,
+      posterUrl: release.poster_url ?? "",
+      description: "Description",
+      releaseDate: release.source_release_date ?? "",
+      type: release.type,
+    } as MovieModel;
   });
 
   store.dispatch(saveLocalReleases(model));

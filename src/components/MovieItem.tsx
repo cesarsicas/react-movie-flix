@@ -1,5 +1,5 @@
-import type { MovieModel } from "../model/MovieModel";
 import placeholder from "../assets/poster_placeholder.png";
+import type MovieModel from "../model/MovieModel";
 
 const MovieItem: React.FC<
   React.PropsWithChildren<{ movie: MovieModel; showBottomInfo: Boolean }>
