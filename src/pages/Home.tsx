@@ -8,6 +8,7 @@ import { useLoaderData } from "react-router-dom";
 import { saveLocalReleases } from "../data/redux/releasesSlice";
 import { store } from "../data/redux/store";
 import type MovieModel from "../model/MovieModel";
+import type { MovieRelease } from "../model/data/MovieRelease";
 
 interface LoaderData {
   releases: MovieModel[];
@@ -48,7 +49,7 @@ export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
     return { releases: cachedMovies };
   }
 
-  const response = await fetch(API_BASE_URL + "/movies/releases", {
+  const response = await fetch(API_BASE_URL + "/titles/releases", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -59,9 +60,9 @@ export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
     throw new Error("Could not fetch movies.");
   }
 
-  const data = (await response.json()) as MovieReleaseResponse;
+  const data = (await response.json()) as MovieRelease[];
 
-  const model = data.releases.map((release) => {
+  const model = data.map((release) => {
     return {
       id: release.id,
       title: release.title,
