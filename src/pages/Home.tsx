@@ -3,19 +3,14 @@ import HomeSection from "../components/HomeSection";
 import MoviesList from "../components/MoviesList";
 import PageContainer from "../components/PageContainer";
 import { API_BASE_URL } from "../utils/Constants";
-import type MovieReleaseResponse from "../model/data/MovieReleaseResponse";
 import { useLoaderData } from "react-router-dom";
 import { saveLocalReleases } from "../data/redux/releasesSlice";
 import { store } from "../data/redux/store";
 import type MovieModel from "../model/MovieModel";
 import type { MovieRelease } from "../model/data/MovieRelease";
 
-interface LoaderData {
-  releases: MovieModel[];
-}
-
 export function Home() {
-  const { releases } = useLoaderData() as LoaderData;
+  const { releases } = useLoaderData() as { releases: MovieModel[] };
 
   return (
     <PageContainer>

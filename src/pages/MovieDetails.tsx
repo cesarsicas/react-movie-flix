@@ -3,13 +3,25 @@ import Banner from "../components/Banner";
 import Modal from "../components/Modal";
 import { useEffect, useState } from "react";
 import ReviewForm from "../components/ReviewForm";
-import { useActionData, type ActionFunctionArgs } from "react-router-dom";
+import {
+  useActionData,
+  useLoaderData,
+  type ActionFunctionArgs,
+} from "react-router-dom";
 import ReviewModel from "../model/ReviewModel";
 import MoviewReviewItem from "../components/MovieReviewItem";
+import type { TitleDetailsModel } from "../model/TitleDetailsModel";
+import { API_BASE_URL } from "../utils/Constants";
+import type { TitleDetailsReponse } from "../model/data/TitleDetailsResponse";
+import { capitalize } from "../utils/StringUtils";
 
 type ActionData = { ok: true; review: ReviewModel } | undefined;
 
 export function MovieDetails() {
+  const loaderData = useLoaderData() as
+    | { details: TitleDetailsModel }
+    | undefined;
+  const details = loaderData?.details;
   const actionData = useActionData() as ActionData;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,26 +50,32 @@ export function MovieDetails() {
     }
   }, [actionData]);
 
+  // Handle missing data
+  if (!details) {
+    return (
+      <PageContainer>
+        <div className="flex h-screen items-center justify-center">
+          <p className="text-xl">Loading movie details...</p>
+        </div>
+      </PageContainer>
+    );
+  }
   return (
     <PageContainer>
-      <Banner>
+      <Banner image={details.poster}>
         <div className="grid h-full w-full sm:grid-cols-1 md:grid-cols-[auto_1fr]">
           <div className="flex min-h-[50vh] items-end p-4">
-            <img
-              src="https://m.media-amazon.com/images/I/51EG732BV3L._AC_SY679_.jpg"
-              className="h-78 w-58 rounded-sm"
-            />
+            <img src={details.poster} className="h-78 w-58 rounded-sm" />
           </div>
 
           <div className="flex items-end p-4 text-white">
             <div className="w-100">
-              <h1 className="mb-4 text-3xl font-bold">
-                Operation Thunderstrike
-              </h1>
+              <h1 className="mb-4 text-3xl font-bold">{details.title}</h1>
+              <h2 className="mb-4 text-2xl font-bold">
+                {details.original_title}
+              </h2>
               <p className="text-justify">
-                In a future where time travel is possible, a team of scientists
-                must prevent a paradox that could unravel reality itself. A
-                mind-bending journey through space and time.
+                {details.year} - {capitalize(details.type.replace("_", " "))}
               </p>
             </div>
           </div>
@@ -66,12 +84,7 @@ export function MovieDetails() {
       <div className="mb-12 grid gap-2 sm:grid-cols-1 md:grid-cols-[2fr_1fr]">
         <div className="mt-6">
           <h2 className="text-2xl font-bold text-gray-800">Sinopsis</h2>
-          <p className="mb-6">
-            An elite special forces operative must infiltrate a terrorist
-            organization to prevent a global catastrophe. With time running out,
-            every decision could mean the difference between salvation and
-            destruction.
-          </p>
+          <p className="mb-6">{details.plot_overview}</p>
           <h2 className="text-2xl font-bold text-gray-800">Cast and Crew</h2>
           <h3>Director</h3>
           <p>Michael Chen</p>
@@ -84,20 +97,25 @@ export function MovieDetails() {
 
           <div className="mb-2 flex w-full justify-between">
             <p>Genre</p>
-            <p>Action</p>
+            <p>{details.genre_names?.join(" / ")}</p>
           </div>
           <div className="mb-2 flex w-full justify-between">
             <p>Year</p>
-            <p>2005</p>
+            <p>{details.year}</p>
           </div>
-          <div className="mb-2 flex w-full justify-between">
-            <p>Duration</p>
-            <p>2h 15min</p>
-          </div>
-          <div className="flex w-full justify-between">
-            <p>Rating</p>
-            <p>4/5</p>
-          </div>
+
+          {details.runtime_minutes && (
+            <div className="mb-2 flex w-full justify-between">
+              <p>Duration</p>
+              <p>{details.runtime_minutes} min.</p>
+            </div>
+          )}
+          {details.user_rating && (
+            <div className="flex w-full justify-between">
+              <p>Rating</p>
+              <p>{details.user_rating}</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -142,4 +160,27 @@ export async function action({ request }: ActionFunctionArgs) {
   // TODO: api call
 
   return { ok: true, review: newReview };
+}
+
+export async function titleDetailsLoader({
+  params,
+}: {
+  params: { id: string };
+}): Promise<{
+  details: TitleDetailsModel;
+}> {
+  const response = await fetch(`${API_BASE_URL}/titles/${params.id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not fetch movies.");
+  }
+
+  const data = (await response.json()) as TitleDetailsReponse;
+
+  return { details: data as TitleDetailsModel };
 }
