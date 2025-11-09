@@ -1,6 +1,8 @@
 import { redirect, type ActionFunctionArgs } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import PageContainer from "../components/PageContainer";
+import { API_BASE_URL } from "../utils/Constants";
+import type { LoginResponse } from "../model/data/LoginResponse";
 
 export function Auth() {
   return (
@@ -24,26 +26,32 @@ export async function action({ request }: ActionFunctionArgs) {
   const email = formData.get("email");
   const password = formData.get("password");
 
-  // return { errors: ["Error example"] };
+  const response = await fetch(API_BASE_URL + "/auth/" + mode, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ login: email, password: password, role: "DEFAULT" }),
+  });
 
-  // const response = await fetch("https://your-backend-api.com/auth/" + mode, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ email, password }),
-  // });
+  console.log(response);
 
-  // if (response.status === 422 || response.status === 401) {
-  //   return response;
-  // }
+  let authErrorMessage = "Could not authenticate user";
 
-  // if (!response.ok) {
-  //   throw new Error("Could not authenticate user.");
-  // }
+  if (mode == "signup") {
+    authErrorMessage = "Could not register user";
+  }
 
-  //TODO implement backend and save returned token
+  if (!response.ok) {
+    return { errors: [authErrorMessage] };
+  }
 
-  localStorage.setItem("token", "123456");
+  if (mode == "signup") {
+    return redirect("/");
+  }
+
+  const data = (await response.json()) as LoginResponse;
+
+  localStorage.setItem("token", data.tokenJWT);
   return redirect("/profile");
 }

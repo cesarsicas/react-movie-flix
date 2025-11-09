@@ -5,13 +5,11 @@ import {
   titleDetailsLoader,
 } from "./pages/MovieDetails.tsx";
 import { Home, moviesLoader } from "./pages/Home.tsx";
-import { createBrowserRouter } from "react-router";
 import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
-import { RouterProvider } from "react-router-dom";
-import Profile from "./pages/Profile.tsx";
-import { checkAuthLoader, tokenLoader } from "./utils/auth.tsx";
-//import TestaRedux from "./pages/TestaRedux.tsx";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Profile, { profileLoader } from "./pages/Profile.tsx";
+import { tokenLoader } from "./utils/auth.tsx";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +27,7 @@ const router = createBrowserRouter([
         action: movieReviewAcion,
         loader: titleDetailsLoader,
       },
-      { path: "/profile", element: <Profile />, loader: checkAuthLoader },
+      { path: "/profile", element: <Profile />, loader: profileLoader },
     ],
   },
 ]);

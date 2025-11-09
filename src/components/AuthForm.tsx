@@ -33,6 +33,10 @@ export default function AuthForm() {
               </ul>
             )}
           </div>
+          <div className="mb-4 text-green-500">
+            {data && data.success && <p>{data.success as string}</p>}
+          </div>
+
           <div className="flex flex-col">
             <label htmlFor="email" className="mb-2 font-semibold">
               Email:
@@ -62,7 +66,7 @@ export default function AuthForm() {
                 type="submit"
                 className="mt-4 mb-2 min-w-[120px] rounded border bg-slate-800 px-6 py-2 text-center text-white hover:bg-slate-700 focus:outline-none"
               >
-                {isSubmitting ? "Submitting..." : "Save"}
+                {isSubmitting ? "Submitting..." : "Send"}
               </button>
             )}
 

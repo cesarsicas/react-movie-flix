@@ -7,6 +7,7 @@ import {
   useActionData,
   useLoaderData,
   type ActionFunctionArgs,
+  type LoaderFunction,
 } from "react-router-dom";
 import ReviewModel from "../model/ReviewModel";
 import MoviewReviewItem from "../components/MovieReviewItem";
@@ -162,13 +163,11 @@ export async function action({ request }: ActionFunctionArgs) {
   return { ok: true, review: newReview };
 }
 
-export async function titleDetailsLoader({
-  params,
-}: {
-  params: { id: string };
-}): Promise<{
-  details: TitleDetailsModel;
-}> {
+export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
+  const id = params.id;
+  if (!id) {
+    throw new Response("Not Found", { status: 404 });
+  }
   const response = await fetch(`${API_BASE_URL}/titles/${params.id}`, {
     method: "GET",
     headers: {
@@ -183,4 +182,4 @@ export async function titleDetailsLoader({
   const data = (await response.json()) as TitleDetailsReponse;
 
   return { details: data as TitleDetailsModel };
-}
+};
