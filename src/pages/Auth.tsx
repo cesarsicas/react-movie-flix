@@ -2,7 +2,7 @@ import { redirect, type ActionFunctionArgs } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import PageContainer from "../components/PageContainer";
 import { API_BASE_URL } from "../utils/Constants";
-import type { LoginResponse } from "../model/data/LoginResponse";
+import type { LoginResponse } from "../data/model/LoginResponse";
 
 export function Auth() {
   return (

@@ -9,12 +9,12 @@ import {
   type ActionFunctionArgs,
   type LoaderFunction,
 } from "react-router-dom";
-import ReviewModel from "../model/ReviewModel";
 import MoviewReviewItem from "../components/MovieReviewItem";
-import type { TitleDetailsModel } from "../model/TitleDetailsModel";
 import { API_BASE_URL } from "../utils/Constants";
-import type { TitleDetailsReponse } from "../model/data/TitleDetailsResponse";
 import { capitalize } from "../utils/StringUtils";
+import ReviewModel from "../domain/model/ReviewModel";
+import type { TitleDetailsModel } from "../domain/model/TitleDetailsModel";
+import type { TitleDetailsReponse } from "../data/model/TitleDetailsResponse";
 
 type ActionData = { ok: true; review: ReviewModel } | undefined;
 

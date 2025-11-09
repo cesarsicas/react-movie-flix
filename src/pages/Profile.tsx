@@ -1,6 +1,6 @@
 import PageContainer from "../components/PageContainer";
-import type { ProfileResponse } from "../model/data/ProfileResponse";
-import type { ProfileModel } from "../model/ProfileModel";
+import type { ProfileResponse } from "../data/model/ProfileResponse";
+import type { ProfileModel } from "../domain/model/ProfileModel";
 import { getAuthToken } from "../utils/auth";
 import { API_BASE_URL } from "../utils/Constants";
 

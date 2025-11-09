@@ -2,12 +2,9 @@ import Banner from "../components/Banner";
 import HomeSection from "../components/HomeSection";
 import MoviesList from "../components/MoviesList";
 import PageContainer from "../components/PageContainer";
-import { API_BASE_URL } from "../utils/Constants";
 import { useLoaderData } from "react-router-dom";
-import { saveLocalReleases } from "../data/redux/releasesSlice";
-import { store } from "../data/redux/store";
-import type MovieModel from "../model/MovieModel";
-import type { MovieRelease } from "../model/data/MovieRelease";
+import getTitlesUseCase from "../domain/usecases/getTitlesUseCase";
+import type MovieModel from "../domain/model/MovieModel";
 
 export function Home() {
   const { releases } = useLoaderData() as { releases: MovieModel[] };
@@ -38,37 +35,6 @@ export function Home() {
 }
 
 export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
-  const cachedMovies: MovieModel[] = store?.getState()?.releases?.movies;
-
-  if (cachedMovies && cachedMovies.length > 0) {
-    return { releases: cachedMovies };
-  }
-
-  const response = await fetch(API_BASE_URL + "/titles/releases", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Could not fetch movies.");
-  }
-
-  const data = (await response.json()) as MovieRelease[];
-
-  const model = data.map((release) => {
-    return {
-      id: release.id,
-      title: release.title,
-      posterUrl: release.poster_url ?? "",
-      description: "Description",
-      releaseDate: release.source_release_date ?? "",
-      type: release.type,
-    } as MovieModel;
-  });
-
-  store.dispatch(saveLocalReleases(model));
-
-  return { releases: model };
+  const data = await getTitlesUseCase();
+  return { releases: data.releases };
 }
