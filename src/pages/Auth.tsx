@@ -47,7 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   if (mode == "signup") {
-    return redirect("/");
+    return { success: "User created with success!" };
   }
 
   const data = (await response.json()) as LoginResponse;
