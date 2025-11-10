@@ -1,4 +1,4 @@
-import App from "./App";
+import App from "./presentation/App.tsx";
 import "./index.css";
 import ReactDOM from "react-dom/client";
 import { store } from "./data/redux/store.ts";
