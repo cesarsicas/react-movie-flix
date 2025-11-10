@@ -1,7 +1,7 @@
 import { API_BASE_URL } from "../../utils/Constants";
 import type { MovieRelease } from "../model/MovieRelease";
 
-export async function getTitlesFromApi(): Promise<MovieRelease[]> {
+export async function getTitles(): Promise<MovieRelease[]> {
   const response = await fetch(API_BASE_URL + "/titles/releases", {
     method: "GET",
     headers: {

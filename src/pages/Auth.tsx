@@ -1,8 +1,8 @@
 import { redirect, type ActionFunctionArgs } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import PageContainer from "../components/PageContainer";
-import { API_BASE_URL } from "../utils/Constants";
-import type { LoginResponse } from "../data/model/LoginResponse";
+import loginUseCase from "../domain/usecases/loginUseCase";
+import signUpUseCase from "../domain/usecases/signUpUseCase";
 
 export function Auth() {
   return (
@@ -23,35 +23,22 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const formData = await request.formData();
-  const email = formData.get("email");
-  const password = formData.get("password");
-
-  const response = await fetch(API_BASE_URL + "/auth/" + mode, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ login: email, password: password, role: "DEFAULT" }),
-  });
-
-  console.log(response);
-
-  let authErrorMessage = "Could not authenticate user";
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
   if (mode == "signup") {
-    authErrorMessage = "Could not register user";
+    try {
+      signUpUseCase(email, password);
+      return { success: "User created with success!" };
+    } catch (error) {
+      return { errors: ["Could not register user"] };
+    }
+  } else {
+    try {
+      await loginUseCase(email, password);
+      return redirect("/profile");
+    } catch (error) {
+      return { errors: ["Could not authenticate user"] };
+    }
   }
-
-  if (!response.ok) {
-    return { errors: [authErrorMessage] };
-  }
-
-  if (mode == "signup") {
-    return { success: "User created with success!" };
-  }
-
-  const data = (await response.json()) as LoginResponse;
-
-  localStorage.setItem("token", data.tokenJWT);
-  return redirect("/profile");
 }

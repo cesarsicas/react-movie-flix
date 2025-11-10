@@ -1,4 +1,4 @@
-import { getTitlesFromApi } from "../../data/api/titleApi";
+import { getTitles } from "../../data/api/titleApi";
 import { saveLocalReleases } from "../../data/redux/releasesSlice";
 import { store } from "../../data/redux/store";
 import type MovieModel from "../model/MovieModel";
@@ -12,7 +12,7 @@ export default async function getTitlesUseCase(): Promise<{
     return { releases: cachedMovies };
   }
 
-  const response = await getTitlesFromApi();
+  const response = await getTitles();
 
   const model = response.map((release) => {
     return {
