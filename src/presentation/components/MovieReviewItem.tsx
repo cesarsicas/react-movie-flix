@@ -1,4 +1,4 @@
-import type ReviewModel from "../model/ReviewModel";
+import type ReviewModel from "../../domain/model/ReviewModel";
 
 const MoviewReviewItem: React.FC<
   React.PropsWithChildren<{ movie: ReviewModel }>

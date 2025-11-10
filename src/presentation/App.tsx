@@ -9,7 +9,7 @@ import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Profile, { profileLoader } from "./pages/Profile.tsx";
-import { tokenLoader } from "./utils/auth.tsx";
+import { tokenLoader } from "../utils/auth.tsx";
 
 const router = createBrowserRouter([
   {

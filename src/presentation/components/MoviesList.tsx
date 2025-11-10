@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import MovieItem from "./MovieItem";
-import type MovieModel from "../model/MovieModel";
+import type MovieModel from "../../domain/model/MovieModel";
 
 const MoviesList: React.FC<
   React.PropsWithChildren<{ movies: MovieModel[] }>
