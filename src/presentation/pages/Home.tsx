@@ -3,8 +3,8 @@ import HomeSection from "../components/HomeSection";
 import MoviesList from "../components/MoviesList";
 import PageContainer from "../components/PageContainer";
 import { useLoaderData } from "react-router-dom";
-import getTitlesUseCase from "../domain/usecases/getTitlesUseCase";
-import type MovieModel from "../domain/model/MovieModel";
+import getTitlesUseCase from "../../domain/usecases/getTitlesUseCase";
+import type MovieModel from "../../domain/model/MovieModel";
 
 export function Home() {
   const { releases } = useLoaderData() as { releases: MovieModel[] };

@@ -1,14 +1,14 @@
-import { action as authformAction, Auth } from "./pages/Auth.tsx";
-import { action as logoutAction } from "./pages/Logout.tsx";
+import { action as authformAction, Auth } from "./presentation/pages/Auth.tsx";
+import { action as logoutAction } from "./presentation/pages/Logout.tsx";
 import {
   action as movieReviewAcion,
   titleDetailsLoader,
-} from "./pages/MovieDetails.tsx";
-import { Home, moviesLoader } from "./pages/Home.tsx";
-import { MovieDetails } from "./pages/MovieDetails.tsx";
-import RootLayout from "./pages/RootLayout.tsx";
+} from "./presentation/pages/MovieDetails.tsx";
+import { Home, moviesLoader } from "./presentation/pages/Home.tsx";
+import { MovieDetails } from "./presentation/pages/MovieDetails.tsx";
+import RootLayout from "./presentation/pages/RootLayout.tsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Profile, { profileLoader } from "./pages/Profile.tsx";
+import Profile, { profileLoader } from "./presentation/pages/Profile.tsx";
 import { tokenLoader } from "./utils/auth.tsx";
 
 const router = createBrowserRouter([

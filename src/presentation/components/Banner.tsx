@@ -1,4 +1,4 @@
-import movieTheater from "../assets/movie_theater2.png";
+import movieTheater from "../../assets/movie_theater2.png";
 
 const Banner: React.FC<React.PropsWithChildren<{ image?: string }>> = ({
   image = movieTheater,

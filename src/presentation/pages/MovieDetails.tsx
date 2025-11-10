@@ -10,11 +10,11 @@ import {
   type LoaderFunction,
 } from "react-router-dom";
 import MoviewReviewItem from "../components/MovieReviewItem";
-import { API_BASE_URL } from "../utils/Constants";
-import { capitalize } from "../utils/StringUtils";
-import ReviewModel from "../domain/model/ReviewModel";
-import type { TitleDetailsModel } from "../domain/model/TitleDetailsModel";
-import type { TitleDetailsReponse } from "../data/model/TitleDetailsResponse";
+import { API_BASE_URL } from "../../utils/Constants";
+import { capitalize } from "../../utils/StringUtils";
+import ReviewModel from "../../domain/model/ReviewModel";
+import type { TitleDetailsModel } from "../../domain/model/TitleDetailsModel";
+import type { TitleDetailsReponse } from "../../data/model/TitleDetailsResponse";
 
 type ActionData = { ok: true; review: ReviewModel } | undefined;
 

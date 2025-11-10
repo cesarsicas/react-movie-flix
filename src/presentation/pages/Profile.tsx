@@ -1,6 +1,6 @@
 import PageContainer from "../components/PageContainer";
-import type { ProfileModel } from "../domain/model/ProfileModel";
-import getProfileUseCase from "../domain/usecases/getProfileUseCase";
+import type { ProfileModel } from "../../domain/model/ProfileModel";
+import getProfileUseCase from "../../domain/usecases/getProfileUseCase";
 
 export default function Profile() {
   return (

@@ -1,8 +1,8 @@
 import { redirect, type ActionFunctionArgs } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import PageContainer from "../components/PageContainer";
-import loginUseCase from "../domain/usecases/loginUseCase";
-import signUpUseCase from "../domain/usecases/signUpUseCase";
+import loginUseCase from "../../domain/usecases/loginUseCase";
+import signUpUseCase from "../../domain/usecases/signUpUseCase";
 
 export function Auth() {
   return (
