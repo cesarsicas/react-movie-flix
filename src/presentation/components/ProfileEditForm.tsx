@@ -33,28 +33,27 @@ export default function ProfileEditForm() {
             {data && data.success && <p>{data.success as string}</p>}
           </div>
 
-          <div className="flex flex-col">
-            <label htmlFor="email" className="mb-2 font-semibold">
-              Email:
+          <div className="mb-3 flex flex-col">
+            <label htmlFor="name" className="mb-2 font-semibold">
+              Name
             </label>
             <input
-              name="email"
-              type="email"
-              id="email"
+              name="name"
+              type="text"
+              id="name"
               className="w-full rounded-md border border-gray-100 bg-gray-100 p-2 transition-colors focus:border-gray-500 focus:outline-none"
-              placeholder="Enter your email"
+              placeholder="Enter your name"
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="password" className="mb-2 font-semibold">
-              Password:
+            <label htmlFor="bio" className="mb-2 font-semibold">
+              Bio
             </label>
-            <input
-              name="password"
-              type="password"
-              id="password"
-              className="w-full rounded-md border border-gray-100 bg-gray-100 p-2 transition-colors focus:border-gray-500 focus:outline-none"
-              placeholder="Enter your password"
+            <textarea
+              name="bio"
+              id="bio"
+              className="h-[150px] w-full rounded-md border border-gray-100 bg-gray-100 p-2 transition-colors focus:border-gray-500 focus:outline-none"
+              placeholder="Enter a description about you"
             />
 
             {!isSubmitting && (

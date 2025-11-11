@@ -2,8 +2,14 @@ import PageContainer from "../components/PageContainer";
 import type { ProfileModel } from "../../domain/model/ProfileModel";
 
 import Banner from "../components/Banner";
-import { Link, useLoaderData } from "react-router-dom";
+import {
+  Link,
+  redirect,
+  useLoaderData,
+  type ActionFunctionArgs,
+} from "react-router-dom";
 import ProfileEditForm from "../components/ProfileEditForm";
+import saveProfileUseCase from "../../domain/usecases/saveProfileUseCase";
 
 export default function ProfileEdit() {
   const loaderData = useLoaderData() as { details: ProfileModel } | undefined;
@@ -25,4 +31,19 @@ export default function ProfileEdit() {
       </div>
     </PageContainer>
   );
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  console.log("Edit profile action called");
+
+  const formData = await request.formData();
+  const name = formData.get("name") as string;
+  const bio = formData.get("bio") as string;
+
+  try {
+    await saveProfileUseCase({ id: 0, name: name, bio: bio });
+    return redirect("/profile");
+  } catch (error) {
+    return { errors: ["Could not authenticate user"] };
+  }
 }
