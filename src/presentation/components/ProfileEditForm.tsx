@@ -5,15 +5,18 @@ import {
   useNavigation,
   useSearchParams,
 } from "react-router-dom";
+import type { ProfileModel } from "../../domain/model/ProfileModel";
 
-export default function ProfileEditForm() {
+export const ProfileEditForm: React.FC<
+  React.PropsWithChildren<{ profile: ProfileModel | undefined }>
+> = (props) => {
   const data = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   return (
     <>
       <div className="w-full">
-        <h1 className="mb-4 text-center text-3xl font-bold">
+        <h1 className="mb-4 text-center text-3xl font-bold text-gray-800">
           Edit your profile
         </h1>
       </div>
@@ -41,6 +44,7 @@ export default function ProfileEditForm() {
               name="name"
               type="text"
               id="name"
+              defaultValue={props.profile?.name}
               className="w-full rounded-md border border-gray-100 bg-gray-100 p-2 transition-colors focus:border-gray-500 focus:outline-none"
               placeholder="Enter your name"
             />
@@ -52,6 +56,7 @@ export default function ProfileEditForm() {
             <textarea
               name="bio"
               id="bio"
+              defaultValue={props.profile?.bio}
               className="h-[150px] w-full rounded-md border border-gray-100 bg-gray-100 p-2 transition-colors focus:border-gray-500 focus:outline-none"
               placeholder="Enter a description about you"
             />
@@ -69,4 +74,4 @@ export default function ProfileEditForm() {
       </div>
     </>
   );
-}
+};

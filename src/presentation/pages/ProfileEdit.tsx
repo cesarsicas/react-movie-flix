@@ -8,11 +8,12 @@ import {
   useLoaderData,
   type ActionFunctionArgs,
 } from "react-router-dom";
-import ProfileEditForm from "../components/ProfileEditForm";
 import saveProfileUseCase from "../../domain/usecases/saveProfileUseCase";
+import getProfileLocalUseCase from "../../domain/usecases/getProfileLocalUseCase";
+import { ProfileEditForm } from "../components/ProfileEditForm";
 
 export default function ProfileEdit() {
-  const loaderData = useLoaderData() as { details: ProfileModel } | undefined;
+  const loaderData = useLoaderData() as { profile: ProfileModel } | undefined;
 
   return (
     <PageContainer>
@@ -26,14 +27,14 @@ export default function ProfileEdit() {
       </Banner>
       <div className="mb-12 grid gap-2 sm:grid-cols-1">
         <div className="mt-6">
-          <ProfileEditForm />
+          <ProfileEditForm profile={loaderData?.profile} />
         </div>
       </div>
     </PageContainer>
   );
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function profileEditAction({ request }: ActionFunctionArgs) {
   console.log("Edit profile action called");
 
   const formData = await request.formData();
@@ -41,9 +42,22 @@ export async function action({ request }: ActionFunctionArgs) {
   const bio = formData.get("bio") as string;
 
   try {
-    await saveProfileUseCase({ id: 0, name: name, bio: bio });
+    const profileData = await saveProfileUseCase({
+      id: 0,
+      name: name,
+      bio: bio,
+    });
+
     return redirect("/profile");
   } catch (error) {
     return { errors: ["Could not authenticate user"] };
   }
+}
+
+export async function profileEditLoader(): Promise<{
+  profile: ProfileModel;
+}> {
+  const data = await getProfileLocalUseCase();
+
+  return { profile: data.data };
 }

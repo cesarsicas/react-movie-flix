@@ -1,11 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { releasesSlice } from "./releasesSlice";
+import { profileSlice } from "./profileSlice";
 
 export const store = configureStore({
   reducer: {
     releases: releasesSlice.reducer,
+    profile: profileSlice.reducer,
   },
 });
-
-// export type RootState = ReturnType<typeof store.getState>;
-// export type AppDispatch = typeof store.dispatch;

@@ -1,4 +1,6 @@
 import { getProfile } from "../../data/api/defaultUserApi";
+import { saveLocalProfile } from "../../data/redux/profileSlice";
+import { store } from "../../data/redux/store";
 import { getAuthToken } from "../../utils/auth";
 import type { ProfileModel } from "../model/ProfileModel";
 
@@ -8,5 +10,8 @@ export default async function getProfileUseCase(): Promise<{
   const token = getAuthToken();
   const data = await getProfile(token);
 
-  return { data: data.response as ProfileModel };
+  const profileModel = data.response as ProfileModel;
+  store.dispatch(saveLocalProfile(profileModel));
+
+  return { data: profileModel };
 }

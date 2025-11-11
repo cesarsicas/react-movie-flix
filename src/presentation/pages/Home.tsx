@@ -5,6 +5,7 @@ import PageContainer from "../components/PageContainer";
 import { useLoaderData } from "react-router-dom";
 import getTitlesUseCase from "../../domain/usecases/getTitlesUseCase";
 import type MovieModel from "../../domain/model/MovieModel";
+import getProfileUseCase from "../../domain/usecases/getProfileUseCase";
 
 export function Home() {
   const { releases } = useLoaderData() as { releases: MovieModel[] };
@@ -36,5 +37,6 @@ export function Home() {
 
 export async function moviesLoader(): Promise<{ releases: MovieModel[] }> {
   const data = await getTitlesUseCase();
+  await getProfileUseCase();
   return { releases: data.releases };
 }

@@ -13,7 +13,7 @@ export async function getProfile(token: string): Promise<{
     },
   });
 
-  if (response.status === 404) {
+  if (response.status === 404 || response.status === 403) {
     return { response: { id: 0, name: "", bio: "" } as ProfileResponse };
   }
 
@@ -28,7 +28,9 @@ export async function getProfile(token: string): Promise<{
 export async function postProfile(
   token: string,
   profile: ProfileUpdate,
-): Promise<void> {
+): Promise<{
+  response: ProfileResponse;
+}> {
   const response = await fetch(`${API_BASE_URL}/default/me`, {
     method: "POST",
     headers: {
@@ -41,4 +43,7 @@ export async function postProfile(
   if (!response.ok) {
     throw new Error("Could not update profile.");
   }
+
+  const data = (await response.json()) as ProfileResponse;
+  return { response: data };
 }
