@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
 import { Form, Link, useRouteLoaderData } from "react-router-dom";
+import { UserAvatar } from "./UserAvatar";
 
 export default function AppHeader() {
   const tokenData = useRouteLoaderData("root");
@@ -28,10 +29,9 @@ export default function AppHeader() {
                 </button>
               </Form>
             </div>
-            <Link
-              to={`/profile`}
-              className="ml-2 h-[30px] w-[30px] rounded-[15px] bg-gray-900"
-            ></Link>
+            <Link to={`/profile`} className="">
+              <UserAvatar />
+            </Link>
           </>
         ) : (
           <>
@@ -44,7 +44,7 @@ export default function AppHeader() {
 
             <Link
               to={`/auth?mode=signup`}
-              className="mx-5 min-w-[120px] rounded border bg-slate-800 px-6 py-2 text-center text-white hover:bg-slate-700 focus:outline-none"
+              className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
             >
               Signup
             </Link>

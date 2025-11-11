@@ -10,6 +10,7 @@ import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Profile, { profileLoader } from "./pages/Profile.tsx";
 import { tokenLoader } from "../utils/auth.tsx";
+import ProfileEdit from "./pages/ProfileEdit.tsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,11 @@ const router = createBrowserRouter([
         loader: titleDetailsLoader,
       },
       { path: "/profile", element: <Profile />, loader: profileLoader },
+      {
+        path: "/profile/edit",
+        element: <ProfileEdit />,
+        loader: profileLoader,
+      },
     ],
   },
 ]);
