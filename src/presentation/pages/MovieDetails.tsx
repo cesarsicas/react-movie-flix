@@ -10,40 +10,29 @@ import {
   type LoaderFunction,
 } from "react-router-dom";
 import MoviewReviewItem from "../components/MovieReviewItem";
-import { API_BASE_URL } from "../../utils/Constants";
 import { capitalize } from "../../utils/StringUtils";
 import ReviewModel from "../../domain/model/ReviewModel";
 import type { TitleDetailsModel } from "../../domain/model/TitleDetailsModel";
-import type { TitleDetailsReponse } from "../../data/model/TitleDetailsResponse";
+import getTitleDetailsUseCase from "../../domain/usecases/getTitleDetailsUseCase";
+import getTitleReviewsUseCase from "../../domain/usecases/getTitleReviewsUseCase";
 
 type ActionData = { ok: true; review: ReviewModel } | undefined;
 
 export function MovieDetails() {
-  const loaderData = useLoaderData() as
-    | { details: TitleDetailsModel }
-    | undefined;
+  const loaderData = useLoaderData();
+
   const details = loaderData?.details;
+  const receivedReviews = loaderData?.reviews as ReviewModel[];
+
   const actionData = useActionData() as ActionData;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const [reviews, setReviews] = useState<ReviewModel[]>([]);
+  const [reviews, setReviews] = useState<ReviewModel[]>(receivedReviews);
 
-  // Load initial reviews
-  useEffect(() => {
-    setReviews([
-      new ReviewModel(
-        "id-1",
-        "ActionFan23",
-        "Solid performances and impressive cinematography.",
-      ),
-      new ReviewModel("id-2", "ScyFyRule", "Best movie ever."),
-    ]);
-  }, []);
-
-  // Handle new review submission
+  //todo call new usecase
   useEffect(() => {
     if (actionData?.ok && actionData.review) {
       setReviews((prevReviews) => [...prevReviews, actionData.review]);
@@ -51,7 +40,6 @@ export function MovieDetails() {
     }
   }, [actionData]);
 
-  // Handle missing data
   if (!details) {
     return (
       <PageContainer>
@@ -168,18 +156,9 @@ export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
   if (!id) {
     throw new Response("Not Found", { status: 404 });
   }
-  const response = await fetch(`${API_BASE_URL}/titles/${params.id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
 
-  if (!response.ok) {
-    throw new Error("Could not fetch movies.");
-  }
+  const details = await getTitleDetailsUseCase(Number(id));
+  const reviews = await getTitleReviewsUseCase(Number(id));
 
-  const data = (await response.json()) as TitleDetailsReponse;
-
-  return { details: data as TitleDetailsModel };
+  return { details: details, reviews: reviews };
 };
