@@ -13,11 +13,14 @@ export default function AppHeader() {
         </h1>
       </Link>
       <div className="">
-        <input
-          type="text"
-          placeholder="Search movies and tv series..."
-          className="w-full rounded-md border border-gray-100 bg-gray-100 p-2 transition-colors focus:border-gray-500 focus:outline-none"
-        />
+        <Form action="/title/search/" method="get">
+          <input
+            type="text"
+            name="query"
+            placeholder="Search movies and tv series..."
+            className="w-full rounded-md border border-gray-100 bg-gray-100 p-2 transition-colors focus:border-gray-500 focus:outline-none"
+          />
+        </Form>
       </div>
       <div className="flex w-full items-center justify-end">
         {tokenData ? (

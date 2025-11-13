@@ -14,6 +14,7 @@ import ProfileEdit, {
   profileEditAction,
   profileEditLoader,
 } from "./pages/ProfileEdit.tsx";
+import { SearchResult, titleSearchLoader } from "./pages/SearchResult.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,10 +27,15 @@ const router = createBrowserRouter([
       { path: "/auth", element: <Auth />, action: authformAction },
       { path: "/logout", action: logoutAction },
       {
-        path: "/movie/details/:id",
+        path: "/title/details/:id",
         element: <MovieDetails />,
         action: movieReviewAcion,
         loader: titleDetailsLoader,
+      },
+      {
+        path: "/title/search/",
+        element: <SearchResult />,
+        loader: titleSearchLoader,
       },
       { path: "/profile", element: <Profile />, loader: profileLoader },
       {
