@@ -113,9 +113,13 @@ export function MovieDetails() {
           User Reviews
         </h2>
 
-        {reviews.map((movie) => {
-          return <MoviewReviewItem movie={movie} key={movie.id} />;
-        })}
+        {reviews.length > 0 ? (
+          reviews.map((movie) => {
+            return <MoviewReviewItem movie={movie} key={movie.id} />;
+          })
+        ) : (
+          <p>No reviews yet :(</p>
+        )}
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Review">
