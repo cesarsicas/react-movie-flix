@@ -3,6 +3,10 @@
 A small movie and series web application built with **React**, **TypeScript**, **Vite**, **Redux**, **React Router**, and **Tailwind CSS**.  
 It demonstrates authentication with **JWT tokens**, a responsive UI, clean architecture organization, and several real-world features such as title browsing, reviews, and user profile management.
 
+> **Important:**  
+> This frontend must be used together with the backend available in this repository:  
+> **https://github.com/cesarsicas/spring-movie-flix**
+
 ---
 
 ## 🚀 Technologies Used
