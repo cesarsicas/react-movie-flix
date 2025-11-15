@@ -11,11 +11,11 @@ import {
 } from "react-router-dom";
 import MoviewReviewItem from "../components/MovieReviewItem";
 import { capitalize } from "../../utils/StringUtils";
-import ReviewModel from "../../domain/model/ReviewModel";
 import getTitleDetailsUseCase from "../../domain/usecases/getTitleDetailsUseCase";
 import getTitleReviewsUseCase from "../../domain/usecases/getTitleReviewsUseCase";
 import { getAuthToken } from "../../utils/auth";
 import saveTitleReviewUseCase from "../../domain/usecases/saveTitleReviewUseCase";
+import type ReviewModel from "../../domain/model/ReviewModel";
 
 type ActionData = { ok: true; review: ReviewModel } | undefined;
 
@@ -125,7 +125,7 @@ export function MovieDetails() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Review">
-        <ReviewForm />
+        <ReviewForm externalId={details.id} />
       </Modal>
       {isUserLogged == true && (
         <div className="text-center">

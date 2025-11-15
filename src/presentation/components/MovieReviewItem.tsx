@@ -9,7 +9,7 @@ const MoviewReviewItem: React.FC<
       <div className="mb-2 flex items-center">
         <UserAvatar />
         <div className="mx-2">
-          <p>{props.movie.userName}</p>
+          <p>{props.movie.defaultUserName}</p>
           <p className="text-xs text-gray-500">2024-09-14</p>
         </div>
       </div>

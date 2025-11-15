@@ -1,6 +1,6 @@
 import { Form, useActionData, useNavigation } from "react-router-dom";
 
-export default function ReviewForm() {
+const ReviewForm: React.FC<{ externalId: string }> = (props) => {
   const data = useActionData();
   const navigation = useNavigation();
 
@@ -26,6 +26,12 @@ export default function ReviewForm() {
             )}
           </div>
           <div className="flex flex-col">
+            <input
+              id="externalTitleId"
+              name="externalTitleId"
+              hidden
+              value={props.externalId}
+            />
             <textarea
               name="review"
               id="review"
@@ -47,4 +53,6 @@ export default function ReviewForm() {
       </div>
     </>
   );
-}
+};
+
+export default ReviewForm;
