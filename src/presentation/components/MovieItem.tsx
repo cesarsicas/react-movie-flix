@@ -7,7 +7,7 @@ const MovieItem: React.FC<
   return (
     <div
       key={props.movie.id}
-      className="max-w-65 transform cursor-pointer overflow-hidden rounded-md bg-white shadow-xl transition duration-300 hover:scale-[1.02]"
+      className="max-w-65 min-w-50 transform cursor-pointer overflow-hidden rounded-md bg-white shadow-xl transition duration-300 hover:scale-[1.02]"
     >
       <img
         src={props.movie.posterUrl ? props.movie.posterUrl : placeholder}

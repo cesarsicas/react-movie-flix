@@ -11,7 +11,7 @@ const MoviesList: React.FC<
       <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
         {props.movies.map((movie) => {
           return (
-            <Link key={movie.id} to={`/movie/details/${movie.id}`}>
+            <Link key={movie.id} to={`/title/details/${movie.id}`}>
               <MovieItem movie={movie} showBottomInfo={true} />
             </Link>
           );

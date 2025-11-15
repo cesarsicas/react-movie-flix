@@ -12,9 +12,10 @@ import {
 import MoviewReviewItem from "../components/MovieReviewItem";
 import { capitalize } from "../../utils/StringUtils";
 import ReviewModel from "../../domain/model/ReviewModel";
-import type { TitleDetailsModel } from "../../domain/model/TitleDetailsModel";
 import getTitleDetailsUseCase from "../../domain/usecases/getTitleDetailsUseCase";
 import getTitleReviewsUseCase from "../../domain/usecases/getTitleReviewsUseCase";
+import { getAuthToken } from "../../utils/auth";
+import saveTitleReviewUseCase from "../../domain/usecases/saveTitleReviewUseCase";
 
 type ActionData = { ok: true; review: ReviewModel } | undefined;
 
@@ -23,6 +24,7 @@ export function MovieDetails() {
 
   const details = loaderData?.details;
   const receivedReviews = loaderData?.reviews as ReviewModel[];
+  const isUserLogged = loaderData?.isUserLogged as boolean;
 
   const actionData = useActionData() as ActionData;
 
@@ -125,15 +127,16 @@ export function MovieDetails() {
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Review">
         <ReviewForm />
       </Modal>
-
-      <div className="text-center">
-        <button
-          onClick={openModal}
-          className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
-        >
-          Send a review
-        </button>
-      </div>
+      {isUserLogged == true && (
+        <div className="text-center">
+          <button
+            onClick={openModal}
+            className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
+          >
+            Send a review
+          </button>
+        </div>
+      )}
     </PageContainer>
   );
 }
@@ -141,18 +144,14 @@ export function MovieDetails() {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const reviewText = formData.get("review") as string;
+  const externalTitleId = formData.get("externalTitleId") as string;
 
-  const newReview = new ReviewModel(
-    `id-${Date.now()}`,
-    "CurrentUser", //todo
-    reviewText,
-  );
+  const response = await saveTitleReviewUseCase({
+    externalTitleId,
+    review: reviewText,
+  });
 
-  console.log(newReview);
-
-  // TODO: api call
-
-  return { ok: true, review: newReview };
+  return { ok: true, review: response };
 }
 
 export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
@@ -163,6 +162,13 @@ export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
 
   const details = await getTitleDetailsUseCase(Number(id));
   const reviews = await getTitleReviewsUseCase(Number(id));
+  console.log(getAuthToken());
+  const isUserLogged: boolean =
+    getAuthToken() !== "" && getAuthToken() !== undefined;
 
-  return { details: details, reviews: reviews };
+  return {
+    details: details,
+    reviews: reviews,
+    isUserLogged: isUserLogged,
+  };
 };

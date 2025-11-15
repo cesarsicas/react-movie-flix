@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "../../utils/Constants";
 import type { MovieRelease } from "../model/MovieRelease";
+import type { SaveTitleReview } from "../model/SaveTitleReview";
 import type { TitleDetailsReponse } from "../model/TitleDetailsResponse";
 import type { TitleReviewReponse } from "../model/TitleReviewResponse";
 import type { TitleSearchResponse } from "../model/TitleSearchResponse";
@@ -84,6 +85,31 @@ export async function getTitleReviews(
   }
 
   const data = (await response.json()) as TitleReviewReponse[];
+
+  return data;
+}
+
+export async function postTitleReview(
+  token: string,
+  saveTitleReview: SaveTitleReview,
+): Promise<TitleReviewReponse> {
+  if (!saveTitleReview) {
+    throw new Response("Server error", { status: 500 });
+  }
+  const response = await fetch(`${API_BASE_URL}/reviews`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(saveTitleReview),
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not save review");
+  }
+
+  const data = (await response.json()) as TitleReviewReponse;
 
   return data;
 }
