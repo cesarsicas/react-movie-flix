@@ -1,33 +1,115 @@
-# React Movie Flix
+# React Flix
 
-Small movie-listing demo built with React, TypeScript, Vite and Tailwind. It demonstrates a simple movie grid, card components, routing to a details page, and responsive layout using Tailwind utilities.
+A small movie and series web application built with **React**, **TypeScript**, **Vite**, **Redux**, **React Router**, and **Tailwind CSS**.  
+It demonstrates authentication with **JWT tokens**, a responsive UI, clean architecture organization, and several real-world features such as title browsing, reviews, and user profile management.
 
-## Technologies
+---
 
-- React (functional components + hooks)
-- TypeScript
-- Vite (dev server + build)
-- React Router (routing / route params)
-- Tailwind CSS (utility-first styling)
+## 🚀 Technologies Used
 
-## Features
+- **React** (functional components + hooks)
+- **TypeScript**
+- **Vite** (dev server and production build)
+- **React Router** (routing, route params, loaders, and actions)
+- **Redux Toolkit** (global state + caching)
+- **Tailwind CSS** (utility-first styling)
+- **JWT Authentication** (using local storage)
 
-- Responsive movie grid with cards
-- Clickable cards that navigate to a details page (`/movie/details/:id`)
-- Truncated titles and consistent card sizing with Tailwind
-- Example data in `src/components/MoviesList.tsx` (dummy movies)
+---
 
-## Project structure (important files)
+## ⭐ Features
 
-- `src/main.tsx` — app entry, router setup
-- `src/pages/Home.tsx` — home page that renders the movie list
-- `src/components/MoviesList.tsx` — grid of movies
-- `src/components/MovieItem.tsx` — single movie card
-- `src/pages/MovieDetails.tsx` — details page (reads `:id` via `useParams`)
-- `src/model/MovieModel.tsx` — MovieModel class
-- `index.html`, `vite.config.ts`, and Tailwind config — build/dev setup
+### 🔐 Authentication
 
-## Getting started (Windows PowerShell)
+- User signup (email + password)
+- User login (email + password)
+- Persistent auth using a received **JWT token**
+- Private routes for authenticated users
+
+### 🎬 Titles
+
+- Grid of movies and series
+- New releases and trending titles sections
+- Title details page
+- Title search
+
+### 💬 Reviews
+
+- View reviews submitted by users
+- Submit a new review (**only logged-in users**)
+
+### 👤 Profile
+
+- View profile info (**only logged-in users**)
+- Edit profile info (**only logged-in users**)
+
+---
+
+## 📁 Project Structure
+
+This project follows a simplified **Clean Architecture** approach (without over-engineering).  
+The application is divided into **Presentation**, **Domain**, and **Data** layers.
+
+---
+
+### **Presentation Layer**
+
+_UI / React components / routing and user interaction_
+
+- `src/presentation/App.tsx`  
+  App entry point. Sets up routes, loaders (fetch before navigation), and actions (form submissions).
+- `src/presentation/components/`  
+  Shared UI components used across multiple pages.
+- `src/presentation/pages/`  
+  All main pages loaded through React Router.
+- `src/presentation/pages/RootLayout.tsx`  
+  Base layout containing the header, footer, and `Outlet`.
+
+---
+
+### **Domain Layer**
+
+_Business logic, models, and use cases_
+
+- `src/domain/model/`  
+  Shared domain models used across the application.
+- `src/domain/usecases/`  
+  Use cases for fetching or saving data.  
+  Handles caching logic and interacts with Redux.
+
+---
+
+### **Data Layer**
+
+_API communication + Redux storage_
+
+- `src/data/model/`  
+  Types representing API responses and request bodies.
+- `src/data/api/`  
+  REST API calls:
+  - `authApi.ts` — login, signup
+  - `titleApi.ts` — fetch titles, save and fetch reviews
+  - `defaultUserApi.ts` — user profile CRUD
+- `src/data/redux/`  
+  Redux Toolkit slices, root store configuration, and selectors.
+
+---
+
+## 📌 ToDo (Planned Features)
+
+### 🎥 Video Streaming
+
+- Allow logged-in users to **stream video directly from the API**
+- No need to download the entire video file before playing
+
+### 💬 Real-Time Chat
+
+- Provide a **real-time chat system** for logged-in users
+- Enables live interaction while browsing or watching conte
+
+---
+
+## 🛠 Getting Started (Windows PowerShell)
 
 1. Install dependencies
 
