@@ -5,8 +5,10 @@ import type { TitleDetailsReponse } from "../model/TitleDetailsResponse";
 import type { TitleReviewReponse } from "../model/TitleReviewResponse";
 import type { TitleSearchResponse } from "../model/TitleSearchResponse";
 
+const USE_CACHE = true;
+
 export async function getTitles(): Promise<MovieRelease[]> {
-  const response = await fetch(API_BASE_URL + "/titles/releases", {
+  const response = await fetch(`${API_BASE_URL}/titles/releases?useCache=${USE_CACHE}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -29,7 +31,7 @@ export async function getTitlesSearch(
     throw new Response("Server error", { status: 500 });
   }
 
-  const response = await fetch(API_BASE_URL + "/titles/search?query=" + query, {
+  const response = await fetch(`${API_BASE_URL}/titles/search?query=${query}&useCache=${USE_CACHE}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -51,7 +53,7 @@ export async function getTitleDetails(
   if (!externalId) {
     throw new Response("Not Found", { status: 404 });
   }
-  const response = await fetch(`${API_BASE_URL}/titles/${externalId}`, {
+  const response = await fetch(`${API_BASE_URL}/titles/${externalId}?useCache=${USE_CACHE}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
