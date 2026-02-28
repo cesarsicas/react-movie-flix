@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       { path: "/auth", element: <Auth />, action: authformAction },
       { path: "/logout", action: logoutAction },
       {
-        path: "/title/details/:id",
+        path: "/title/details/:externalId",
         element: <MovieDetails />,
         action: movieReviewAcion,
         loader: titleDetailsLoader,

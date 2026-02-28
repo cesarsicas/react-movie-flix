@@ -17,6 +17,7 @@ export default async function getTitlesUseCase(): Promise<{
   const model = response.map((release) => {
     return {
       id: release.id,
+      externalId: release.external_id,
       title: release.title,
       posterUrl: release.poster_url ?? "",
       description: "Description",

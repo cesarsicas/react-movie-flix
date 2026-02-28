@@ -41,6 +41,7 @@ export async function titleSearchLoader({
   const result = (await getTitlesSearchUseCase(query)).map((searchResult) => {
     return {
       id: searchResult.id,
+      externalId: searchResult.id,
       title: searchResult.name,
       posterUrl: searchResult.image_url,
       releaseDate: "",

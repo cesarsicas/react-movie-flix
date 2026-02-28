@@ -155,7 +155,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
-  const id = params.id;
+  const id = params.externalId;
   if (!id) {
     throw new Response("Not Found", { status: 404 });
   }

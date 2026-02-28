@@ -1,5 +1,6 @@
 export class MovieRelease {
   public id: number;
+  public external_id: number;
   public title: string;
   public type: string;
   public imdb_id: string | null;
@@ -14,6 +15,7 @@ export class MovieRelease {
 
   constructor(
     id: number,
+    external_id: number,
     title: string,
     type: string,
     imdb_id: string | null = null,
@@ -27,6 +29,7 @@ export class MovieRelease {
     is_original: number | null = null,
   ) {
     this.id = id;
+    this.external_id = external_id;
     this.title = title;
     this.type = type;
     this.imdb_id = imdb_id;
