@@ -15,6 +15,15 @@ import ProfileEdit, {
   profileEditLoader,
 } from "./pages/ProfileEdit.tsx";
 import { SearchResult, titleSearchLoader } from "./pages/SearchResult.tsx";
+import AdminLayout from "./pages/AdminLayout.tsx";
+import { AdminLogin, adminLoginAction } from "./pages/AdminLogin.tsx";
+import { adminLogoutAction } from "./pages/AdminLogout.tsx";
+import AdminHome from "./pages/AdminHome.tsx";
+import {
+  adminTokenLoader,
+  adminRootLoader,
+  checkAdminAuthLoader,
+} from "../utils/adminAuth.ts";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +53,18 @@ const router = createBrowserRouter([
         loader: profileEditLoader,
         action: profileEditAction,
       },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    id: "admin-root",
+    loader: adminTokenLoader,
+    children: [
+      { index: true, loader: adminRootLoader },
+      { path: "login", element: <AdminLogin />, action: adminLoginAction },
+      { path: "logout", action: adminLogoutAction },
+      { path: "home", element: <AdminHome />, loader: checkAdminAuthLoader },
     ],
   },
 ]);
