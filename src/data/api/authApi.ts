@@ -30,7 +30,7 @@ export async function postAdminLogin(
   const response = await fetch(API_BASE_URL + "/auth/admin-login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ login: email, password: password, role: "ADMIN" }),
+    body: JSON.stringify({ login: email, password: password}),
   });
   if (!response.ok) throw new Error("Could not authenticate admin user");
   const data = (await response.json()) as LoginResponse;
