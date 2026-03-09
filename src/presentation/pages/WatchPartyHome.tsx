@@ -1,6 +1,7 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Form, Link, redirect, useLoaderData } from "react-router-dom";
 import { checkAdminAuthLoader } from "../../utils/adminAuth";
 import { getCurrentTransmissionUseCase } from "../../domain/usecases/getCurrentTransmissionUseCase";
+import { stopTransmissionUseCase } from "../../domain/usecases/stopTransmissionUseCase";
 import type { TransmissionModel } from "../../domain/model/TransmissionModel";
 import PageContainer from "../components/PageContainer";
 import TransmissionStatusCard from "../components/TransmissionStatusCard";
@@ -14,6 +15,11 @@ export async function watchPartyHomeLoader() {
   if (authResult) return authResult;
   const transmission = await getCurrentTransmissionUseCase();
   return { transmission };
+}
+
+export async function watchPartyHomeAction() {
+  await stopTransmissionUseCase();
+  return redirect("/admin/watch-party");
 }
 
 export default function WatchPartyHome() {
@@ -32,7 +38,17 @@ export default function WatchPartyHome() {
       </div>
 
       {transmission ? (
-        <TransmissionStatusCard transmission={transmission} />
+        <div className="space-y-4">
+          <TransmissionStatusCard transmission={transmission} />
+          <Form method="post">
+            <button
+              type="submit"
+              className="rounded bg-red-600 px-6 py-2 text-white hover:bg-red-700"
+            >
+              Stop Transmission
+            </button>
+          </Form>
+        </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <p className="mb-6 text-gray-500">No active transmission.</p>

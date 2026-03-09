@@ -24,7 +24,8 @@ import {
   adminRootLoader,
   checkAdminAuthLoader,
 } from "../utils/adminAuth.ts";
-import WatchPartyHome, { watchPartyHomeLoader } from "./pages/WatchPartyHome.tsx";
+import WatchPartyHome, { watchPartyHomeLoader, watchPartyHomeAction } from "./pages/WatchPartyHome.tsx";
+import WatchParty from "./pages/WatchParty.tsx";
 import NewTransmission, {
   newTransmissionLoader,
   newTransmissionAction,
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
         loader: profileEditLoader,
         action: profileEditAction,
       },
+      { path: "/watch-party", element: <WatchParty /> },
     ],
   },
   {
@@ -71,7 +73,7 @@ const router = createBrowserRouter([
       { path: "login", element: <AdminLogin />, action: adminLoginAction },
       { path: "logout", action: adminLogoutAction },
       { path: "home", element: <AdminHome />, loader: checkAdminAuthLoader },
-      { path: "watch-party", element: <WatchPartyHome />, loader: watchPartyHomeLoader },
+      { path: "watch-party", element: <WatchPartyHome />, loader: watchPartyHomeLoader, action: watchPartyHomeAction },
       { path: "watch-party/new", element: <NewTransmission />, loader: newTransmissionLoader, action: newTransmissionAction },
       { path: "watch-party/upload", element: <UploadMovie />, loader: uploadMovieLoader },
     ],
