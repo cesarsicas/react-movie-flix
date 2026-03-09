@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "../../utils/Constants";
 import type { TransmissionModel } from "../../domain/model/TransmissionModel";
+import type { WatchPartyMovieModel } from "../../domain/model/WatchPartyMovieModel";
 
 interface TransmissionResponse {
   title: string;
@@ -7,12 +8,41 @@ interface TransmissionResponse {
   duration: number;
 }
 
-export async function fetchCurrentTransmission(token: string): Promise<TransmissionModel | null> {
-  const response = await fetch(`${API_BASE_URL}/transmissions/current`, {
+interface TransmissionMovieDto {
+  id: number;
+  title: string;
+  duration: number;
+  filename: string;
+}
+
+export async function fetchAvailableMovies(token: string): Promise<WatchPartyMovieModel[]> {
+  const response = await fetch(`${API_BASE_URL}/transmissions/movies`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not fetch available movies.");
+  }
+
+  const data = (await response.json()) as TransmissionMovieDto[];
+
+  return data.map((m) => ({
+    id: String(m.id),
+    title: m.title,
+    duration: m.duration,
+    filename: m.filename,
+  }));
+}
+
+export async function fetchCurrentTransmission(): Promise<TransmissionModel | null> {
+  const response = await fetch(`${API_BASE_URL}/transmissions/current`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
   });
 
