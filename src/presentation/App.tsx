@@ -15,6 +15,22 @@ import ProfileEdit, {
   profileEditLoader,
 } from "./pages/ProfileEdit.tsx";
 import { SearchResult, titleSearchLoader } from "./pages/SearchResult.tsx";
+import AdminLayout from "./pages/AdminLayout.tsx";
+import { AdminLogin, adminLoginAction } from "./pages/AdminLogin.tsx";
+import { adminLogoutAction } from "./pages/AdminLogout.tsx";
+import AdminHome from "./pages/AdminHome.tsx";
+import {
+  adminTokenLoader,
+  adminRootLoader,
+  checkAdminAuthLoader,
+} from "../utils/adminAuth.ts";
+import WatchPartyHome, { watchPartyHomeLoader, watchPartyHomeAction } from "./pages/WatchPartyHome.tsx";
+import WatchParty from "./pages/WatchParty.tsx";
+import NewTransmission, {
+  newTransmissionLoader,
+  newTransmissionAction,
+} from "./pages/NewTransmission.tsx";
+import UploadMovie, { uploadMovieLoader } from "./pages/UploadMovie.tsx";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +60,22 @@ const router = createBrowserRouter([
         loader: profileEditLoader,
         action: profileEditAction,
       },
+      { path: "/watch-party", element: <WatchParty /> },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    id: "admin-root",
+    loader: adminTokenLoader,
+    children: [
+      { index: true, loader: adminRootLoader },
+      { path: "login", element: <AdminLogin />, action: adminLoginAction },
+      { path: "logout", action: adminLogoutAction },
+      { path: "home", element: <AdminHome />, loader: checkAdminAuthLoader },
+      { path: "watch-party", element: <WatchPartyHome />, loader: watchPartyHomeLoader, action: watchPartyHomeAction },
+      { path: "watch-party/new", element: <NewTransmission />, loader: newTransmissionLoader, action: newTransmissionAction },
+      { path: "watch-party/upload", element: <UploadMovie />, loader: uploadMovieLoader },
     ],
   },
 ]);
