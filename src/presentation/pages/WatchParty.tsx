@@ -42,15 +42,26 @@ export default function WatchParty() {
       try {
         const result = await getCurrentTransmissionUseCase();
         setTransmission(result);
+        return result;
       } catch {
         setTransmission(null);
+        return null;
       } finally {
         setIsLoading(false);
       }
     }
 
-    poll();
-    const id = setInterval(poll, POLL_INTERVAL);
+    let id: ReturnType<typeof setInterval>;
+
+    poll().then((result) => {
+      if (!result) {
+        id = setInterval(async () => {
+          const next = await poll();
+          if (next) clearInterval(id);
+        }, POLL_INTERVAL);
+      }
+    });
+
     return () => clearInterval(id);
   }, []);
 
