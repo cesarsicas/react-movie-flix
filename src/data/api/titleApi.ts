@@ -91,6 +91,13 @@ export async function getTitleReviews(
   return data;
 }
 
+export function getTitleStreamUrl(externalId: number): string {
+  if (!externalId) {
+    throw new Error("externalId is required");
+  }
+  return `${API_BASE_URL}/titles/${externalId}/stream`;
+}
+
 export async function postTitleReview(
   token: string,
   saveTitleReview: SaveTitleReview,

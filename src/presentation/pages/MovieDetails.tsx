@@ -13,6 +13,8 @@ import MoviewReviewItem from "../components/MovieReviewItem";
 import { capitalize } from "../../utils/StringUtils";
 import getTitleDetailsUseCase from "../../domain/usecases/getTitleDetailsUseCase";
 import getTitleReviewsUseCase from "../../domain/usecases/getTitleReviewsUseCase";
+import getTitleStreamUseCase from "../../domain/usecases/getTitleStreamUseCase";
+import VideoPlayer from "../components/VideoPlayer";
 import { getAuthToken } from "../../utils/auth";
 import saveTitleReviewUseCase from "../../domain/usecases/saveTitleReviewUseCase";
 import type ReviewModel from "../../domain/model/ReviewModel";
@@ -25,6 +27,7 @@ export function MovieDetails() {
   const details = loaderData?.details;
   const receivedReviews = loaderData?.reviews as ReviewModel[];
   const isUserLogged = loaderData?.isUserLogged as boolean;
+  const streamUrl = loaderData?.streamUrl as string;
 
   const actionData = useActionData() as ActionData;
 
@@ -80,10 +83,20 @@ export function MovieDetails() {
           <h3>Director</h3>
           <p>Michael Chen</p>
           <h3>Cast</h3>
-          <p>John Harrison, Sarah Mitchell, David Rodriguez</p>
+          <p className="mb-6">John Harrison, Sarah Mitchell, David Rodriguez</p>
+
+         <div className="pr-6">  
+              <h2 className="mb-4 text-2xl font-bold text-gray-800">Watch</h2>
+              <VideoPlayer streamUrl={streamUrl} />
+          </div>
+            
+
         </div>
 
-        <div className="mt-6 rounded-md border-1 border-solid border-gray-300 p-4">
+
+        <div className="mt-6">
+
+        <div className="rounded-md border-1 border-solid border-gray-300 p-4">
           <h2 className="text mb-4 font-bold text-gray-800"> Movie details</h2>
 
           <div className="mb-2 flex w-full justify-between">
@@ -108,7 +121,12 @@ export function MovieDetails() {
             </div>
           )}
         </div>
+        </div>
+
+
       </div>
+
+     
 
       <div className="mb-4">
         <h2 className="bg mb-4 text-2xl font-bold text-gray-800">
@@ -162,6 +180,7 @@ export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
 
   const details = await getTitleDetailsUseCase(Number(id));
   const reviews = await getTitleReviewsUseCase(Number(id));
+  const { streamUrl } = getTitleStreamUseCase(Number(id));
   console.log(getAuthToken());
   const isUserLogged: boolean =
     getAuthToken() !== "" && getAuthToken() !== undefined;
@@ -170,5 +189,6 @@ export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
     details: details,
     reviews: reviews,
     isUserLogged: isUserLogged,
+    streamUrl: streamUrl,
   };
 };

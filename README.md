@@ -1,7 +1,7 @@
 # React Flix
 
-A small movie and series web application built with **React**, **TypeScript**, **Vite**, **Redux**, **React Router**, and **Tailwind CSS**.  
-It demonstrates authentication with **JWT tokens**, a responsive UI, clean architecture organization, and several real-world features such as title browsing, reviews, and user profile management.
+A movie and series web application built with **React**, **TypeScript**, **Vite**, **Redux**, **React Router**, and **Tailwind CSS**.
+It demonstrates authentication with **JWT tokens**, a responsive UI, clean architecture organization, and several real-world features such as title browsing, reviews, user profile management, HLS video streaming, and a live Watch Party system with an admin control panel.
 
 > **Important:**  
 > This frontend must be used together with the backend available in this repository:  
@@ -24,6 +24,7 @@ https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
 - **Redux Toolkit** (global state + caching)
 - **Tailwind CSS** (utility-first styling)
 - **JWT Authentication** (using local storage)
+- **hls.js** (HLS video stream playback with native Safari fallback)
 
 ---
 
@@ -40,7 +41,7 @@ https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
 
 - Grid of movies and series
 - New releases and trending titles sections
-- Title details page
+- Title details page with **HLS video player** (streams directly from the API)
 - Title search
 
 ### 💬 Reviews
@@ -52,6 +53,21 @@ https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
 
 - View profile info (**only logged-in users**)
 - Edit profile info (**only logged-in users**)
+
+### 📺 Watch Party
+
+- Public `/watch-party` page that shows the live HLS stream
+- Polls the API every 5 seconds until a transmission becomes active, then stops
+- Displays elapsed time of the current transmission
+
+### 🛠 Admin Panel
+
+- Separate admin authentication with JWT (stored in session)
+- Admin dashboard at `/admin`
+- **New Transmission** — pick an available movie from the API and start a live transmission
+- **Upload Movie** — drag-and-drop upload with a progress bar
+- **Stop Transmission** — end the current live transmission
+- Protected admin routes with automatic redirect on missing/expired token
 
 ---
 
@@ -95,11 +111,12 @@ _API communication + Redux storage_
 
 - `src/data/model/`  
   Types representing API responses and request bodies.
-- `src/data/api/`  
+- `src/data/api/`
   REST API calls:
-  - `authApi.ts` — login, signup
-  - `titleApi.ts` — fetch titles, save and fetch reviews
+  - `authApi.ts` — user login, signup, and admin login
+  - `titleApi.ts` — fetch titles, save and fetch reviews, fetch stream URL
   - `defaultUserApi.ts` — user profile CRUD
+  - `transmissionApi.ts` — get current transmission, start/stop transmission, fetch available movies, upload movie
 - `src/data/redux/`  
   Redux Toolkit slices, root store configuration, and selectors.
 
@@ -107,15 +124,10 @@ _API communication + Redux storage_
 
 ## 📌 ToDo (Planned Features)
 
-### 🎥 Video Streaming
-
-- Allow logged-in users to **stream video directly from the API**
-- No need to download the entire video file before playing
-
 ### 💬 Real-Time Chat
 
 - Provide a **real-time chat system** for logged-in users
-- Enables live interaction while browsing or watching conte
+- Enables live interaction while watching a Watch Party stream
 
 ---
 
