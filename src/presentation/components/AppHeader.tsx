@@ -31,6 +31,12 @@ export default function AppHeader() {
         </Link>
         {tokenData ? (
           <>
+            <Link
+              to="/chat"
+              className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
+            >
+              AI Chat
+            </Link>
             <div>
               <Form action="/logout" method="post">
                 <button className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none">
