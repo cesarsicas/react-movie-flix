@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Markdown from "react-markdown";
 import { checkAuthLoader } from "../../utils/auth.tsx";
 import { getAuthToken } from "../../utils/auth.tsx";
 import { API_BASE_URL } from "../../utils/Constants.ts";
@@ -185,7 +186,23 @@ export default function Chat() {
                         : "bg-gray-100 text-gray-900"
                     }`}
                   >
-                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                    <div className="whitespace-pre-wrap">
+                      <Markdown
+                        components={{
+                          a: ({ href, children }) => (
+                            <a href={href} className="text-blue-600 underline hover:text-blue-800">
+                              {children}
+                            </a>
+                          ),
+                          img: ({ src, alt }) => (
+                            <img src={src} alt={alt} className="mb-2 h-36 rounded-lg object-cover shadow" />
+                          ),
+                          p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+                        }}
+                      >
+                        {msg.content}
+                      </Markdown>
+                    </div>
                     {msg.isStreaming && (
                       <span className="ml-1 inline-block h-[14px] w-[2px] animate-pulse bg-gray-500 align-middle" />
                     )}
