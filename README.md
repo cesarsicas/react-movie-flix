@@ -8,6 +8,12 @@ It demonstrates authentication with **JWT tokens**, a responsive UI, clean archi
 > **https://github.com/cesarsicas/spring-movie-flix**
 
 ---
+## 🎥 Preview
+
+
+https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
+
+
 
 ## 🚀 Technologies Used
 
