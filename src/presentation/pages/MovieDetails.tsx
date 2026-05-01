@@ -13,8 +13,6 @@ import MoviewReviewItem from "../components/MovieReviewItem";
 import { capitalize } from "../../utils/StringUtils";
 import getTitleDetailsUseCase from "../../domain/usecases/getTitleDetailsUseCase";
 import getTitleReviewsUseCase from "../../domain/usecases/getTitleReviewsUseCase";
-import getTitleStreamUseCase from "../../domain/usecases/getTitleStreamUseCase";
-import VideoPlayer from "../components/VideoPlayer";
 import { getAuthToken } from "../../utils/auth";
 import saveTitleReviewUseCase from "../../domain/usecases/saveTitleReviewUseCase";
 import type ReviewModel from "../../domain/model/ReviewModel";
@@ -27,7 +25,6 @@ export function MovieDetails() {
   const details = loaderData?.details;
   const receivedReviews = loaderData?.reviews as ReviewModel[];
   const isUserLogged = loaderData?.isUserLogged as boolean;
-  const streamUrl = loaderData?.streamUrl as string;
 
   const actionData = useActionData() as ActionData;
 
@@ -85,10 +82,19 @@ export function MovieDetails() {
           <h3>Cast</h3>
           <p className="mb-6">John Harrison, Sarah Mitchell, David Rodriguez</p>
 
-         <div className="pr-6">  
-              <h2 className="mb-4 text-2xl font-bold text-gray-800">Watch</h2>
-              <VideoPlayer streamUrl={streamUrl} />
-          </div>
+          {details.trailer && (
+            <div className="pr-6">
+              <h2 className="mb-4 text-2xl font-bold text-gray-800">Trailer</h2>
+              <div className="aspect-video w-full overflow-hidden rounded-md">
+                <iframe
+                  src={details.trailer.replace("watch?v=", "embed/")}
+                  className="h-full w-full"
+                  allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                />
+              </div>
+            </div>
+          )}
             
 
         </div>
@@ -180,8 +186,6 @@ export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
 
   const details = await getTitleDetailsUseCase(Number(id));
   const reviews = await getTitleReviewsUseCase(Number(id));
-  const { streamUrl } = getTitleStreamUseCase(Number(id));
-  console.log(getAuthToken());
   const isUserLogged: boolean =
     getAuthToken() !== "" && getAuthToken() !== undefined;
 
@@ -189,6 +193,5 @@ export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
     details: details,
     reviews: reviews,
     isUserLogged: isUserLogged,
-    streamUrl: streamUrl,
   };
 };
