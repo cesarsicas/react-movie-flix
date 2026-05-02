@@ -1,3 +1,27 @@
+export interface TitleSourceModel {
+  source_id: number;
+  name: string;
+  type: string;
+  region: string;
+  ios_url: string | null;
+  android_url: string | null;
+  web_url: string;
+  format: string;
+  price: number | null;
+  seasons: number | null;
+  episodes: number | null;
+}
+
+export interface TitleCastMemberModel {
+  person_id: number;
+  type: string;
+  full_name: string;
+  headshot_url: string | null;
+  role: string;
+  episode_count: number | null;
+  order: number;
+}
+
 export interface TitleDetailsModel {
   id: number;
   title: string;
@@ -25,4 +49,6 @@ export interface TitleDetailsModel {
   original_language?: string;
   trailer?: string;
   trailer_thumbnail?: string;
+  sources?: TitleSourceModel[];
+  cast?: TitleCastMemberModel[];
 }

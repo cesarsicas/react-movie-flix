@@ -28,14 +28,15 @@ export async function getTitles(): Promise<MovieRelease[]> {
 }
 
 export async function getTitleAndPeopleSearch(
-  query: string,
+  searchValue: string,
+  searchField: string,
   types?: string,
 ): Promise<TitleSearchResponse> {
-  if (!query) {
+  if (!searchValue) {
     throw new Response("Server error", { status: 500 });
   }
 
-  const params = new URLSearchParams({ query });
+  const params = new URLSearchParams({ searchValue, searchField });
   if (types) params.set("types", types);
 
   const response = await fetch(`${API_BASE_URL}/titles/search?${params.toString()}`, {

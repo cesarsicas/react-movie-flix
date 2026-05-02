@@ -2,8 +2,9 @@ import { getTitleAndPeopleSearch } from "../../data/api/titleApi";
 import type { TitleSearchModel } from "../model/TitleSearchModel";
 
 export default async function getTitleAndPeopleSearchUseCase(
-  query: string,
+  searchValue: string,
+  searchField: string,
   types?: string,
 ): Promise<TitleSearchModel> {
-  return await getTitleAndPeopleSearch(query, types);
+  return await getTitleAndPeopleSearch(searchValue, searchField, types);
 }

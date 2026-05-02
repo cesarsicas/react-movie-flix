@@ -3,9 +3,9 @@ import { action as logoutAction } from "./pages/Logout.tsx";
 import {
   action as movieReviewAcion,
   titleDetailsLoader,
-} from "./pages/MovieDetails.tsx";
+  TitleDetails,
+} from "./pages/TitleDetails.tsx";
 import { Home, moviesLoader } from "./pages/Home.tsx";
-import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Profile, { profileLoader } from "./pages/Profile.tsx";
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       { path: "/logout", action: logoutAction },
       {
         path: "/title/details/:externalId",
-        element: <MovieDetails />,
+        element: <TitleDetails />,
         action: movieReviewAcion,
         loader: titleDetailsLoader,
       },
