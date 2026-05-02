@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "../../utils/Constants";
 import type { AutocompleteSearchResponse } from "../model/AutocompleteSearchResponse";
+import type { GenreResponse } from "../model/GenreResponse";
 import type { MovieRelease } from "../model/MovieRelease";
 import type { PersonResponse } from "../model/PersonResponse";
 import type { SaveTitleReview } from "../model/SaveTitleReview";
@@ -9,6 +10,21 @@ import type { TitleReviewReponse } from "../model/TitleReviewResponse";
 import type { TitleSearchResponse } from "../model/TitleSearchResponse";
 
 const USE_CACHE = true;
+
+export async function getGenres(): Promise<GenreResponse[]> {
+  const response = await fetch(`${API_BASE_URL}/titles/genres?useCache=${USE_CACHE}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not fetch genres.");
+  }
+
+  return (await response.json()) as GenreResponse[];
+}
 
 export async function getTitles(): Promise<MovieRelease[]> {
   const response = await fetch(`${API_BASE_URL}/titles/releases?useCache=${USE_CACHE}`, {

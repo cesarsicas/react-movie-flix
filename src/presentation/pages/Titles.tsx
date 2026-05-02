@@ -3,7 +3,8 @@ import Banner from "../components/Banner";
 import PageContainer from "../components/PageContainer";
 import { getTitlesList } from "../../data/api/titleApi";
 import type { TitleListItem } from "../../data/model/TitleListResponse";
-import { GENRE_LIST } from "../../domain/model/Genre";
+import getGenresUseCase from "../../domain/usecases/getGenresUseCase";
+import type { GenreModel } from "../../domain/model/GenreModel";
 
 const TYPE_OPTIONS = [
   { value: "", label: "All Types" },
@@ -38,6 +39,7 @@ interface LoaderData {
   page: number | null;
   total_results: number;
   total_pages: number | null;
+  genres: GenreModel[];
   filters: {
     types: string;
     sort_by: string;
@@ -56,7 +58,7 @@ const inputClass =
   "w-20 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-gray-500 focus:outline-none";
 
 export default function Titles() {
-  const { titles, page, total_pages, total_results, filters } =
+  const { titles, page, total_pages, total_results, genres, filters } =
     useLoaderData() as LoaderData;
 
   const hasPagination = page !== null && total_pages !== null;
@@ -113,8 +115,8 @@ export default function Titles() {
             <label className="text-xs font-medium text-gray-600">Genre</label>
             <select name="genres" defaultValue={filters.genres} className={selectClass}>
               <option value="">All Genres</option>
-              {GENRE_LIST.map((g) => (
-                <option key={g.id} value={String(g.id)}>
+              {genres.map((g) => (
+                <option key={g.id} value={String(g.externalId)}>
                   {g.name}
                 </option>
               ))}
@@ -294,22 +296,26 @@ export async function titlesLoader({ request }: LoaderFunctionArgs): Promise<Loa
   const release_date_start = releaseYearStart ? `${releaseYearStart}0101` : "";
   const release_date_end = releaseYearEnd ? `${releaseYearEnd}1231` : "";
 
-  const response = await getTitlesList({
-    types: types || undefined,
-    sort_by: sort_by || undefined,
-    genres: genres || undefined,
-    user_rating_low: user_rating_low || undefined,
-    user_rating_high: user_rating_high || undefined,
-    release_date_start: release_date_start || undefined,
-    release_date_end: release_date_end || undefined,
-    page,
-  });
+  const [response, genreList] = await Promise.all([
+    getTitlesList({
+      types: types || undefined,
+      sort_by: sort_by || undefined,
+      genres: genres || undefined,
+      user_rating_low: user_rating_low || undefined,
+      user_rating_high: user_rating_high || undefined,
+      release_date_start: release_date_start || undefined,
+      release_date_end: release_date_end || undefined,
+      page,
+    }),
+    getGenresUseCase(),
+  ]);
 
   return {
     titles: response.titles,
     page: response.page,
     total_results: response.total_results,
     total_pages: response.total_pages,
+    genres: genreList,
     filters: {
       types,
       sort_by,
