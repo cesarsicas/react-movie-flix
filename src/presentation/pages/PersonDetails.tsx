@@ -3,14 +3,17 @@ import PageContainer from "../components/PageContainer";
 import Banner from "../components/Banner";
 import placeholder from "../../assets/poster_placeholder.png";
 import type { PersonModel } from "../../domain/model/PersonModel";
+import type MovieModel from "../../domain/model/MovieModel";
 import getPersonUseCase from "../../domain/usecases/getPersonUseCase";
+import getTitlesListUseCase from "../../domain/usecases/getTitlesListUseCase";
 
 interface LoaderData {
   person: PersonModel;
+  titles: MovieModel[];
 }
 
 export default function PersonDetails() {
-  const { person } = useLoaderData() as LoaderData;
+  const { person, titles } = useLoaderData() as LoaderData;
 
   const professions = [
     person.main_profession,
@@ -31,7 +34,7 @@ export default function PersonDetails() {
         </div>
       </Banner>
 
-      <div className="mx-auto max-w-5xl px-4 py-8">
+      <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="flex flex-col gap-8 md:flex-row">
           <div className="flex-shrink-0 md:w-64">
             <img
@@ -80,22 +83,41 @@ export default function PersonDetails() {
             </div>
           </div>
 
-          <div className="flex-1">
-            <h2 className="mb-4 text-2xl font-bold text-gray-800">Known For</h2>
-            {person.known_for.length > 0 ? (
-              <div className="flex flex-wrap gap-3">
-                {person.known_for.map((titleId) => (
-                  <Link
-                    key={titleId}
-                    to={`/title/details/${titleId}`}
-                    className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50 hover:shadow-md transition-all"
-                  >
-                    Title #{titleId}
-                  </Link>
-                ))}
-              </div>
+          <div className="flex-1 overflow-auto">
+            <h2 className="mb-4 text-2xl font-bold text-gray-800">Titles</h2>
+            {titles.length > 0 ? (
+              <table className="w-full text-left text-sm text-gray-700">
+                <thead>
+                  <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500">
+                    <th className="pb-2 pr-4">Title</th>
+                    <th className="pb-2 pr-4">Type</th>
+                    <th className="pb-2">Year</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {titles.map((title) => (
+                    <tr
+                      key={title.id}
+                      className="border-b border-gray-100 transition-colors hover:bg-gray-50"
+                    >
+                      <td className="py-2 pr-4 font-medium">
+                        <Link
+                          to={`/title/details/${title.externalId}`}
+                          className="text-gray-900 hover:underline"
+                        >
+                          {title.title}
+                        </Link>
+                      </td>
+                      <td className="py-2 pr-4 capitalize text-gray-500">
+                        {title.type.replace(/_/g, " ")}
+                      </td>
+                      <td className="py-2 text-gray-500">{title.releaseDate || "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             ) : (
-              <p className="text-gray-500">No known titles on record.</p>
+              <p className="text-gray-500">No titles found.</p>
             )}
           </div>
         </div>
@@ -113,6 +135,10 @@ export async function personDetailsLoader({
     throw new Response("Person not found", { status: 404 });
   }
 
-  const person = await getPersonUseCase(personId);
-  return { person };
+  const [person, { titles }] = await Promise.all([
+    getPersonUseCase(personId),
+    getTitlesListUseCase({ person_id: String(personId) }),
+  ]);
+
+  return { person, titles };
 }

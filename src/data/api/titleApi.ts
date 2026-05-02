@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../../utils/Constants";
+import type { AutocompleteSearchResponse } from "../model/AutocompleteSearchResponse";
 import type { MovieRelease } from "../model/MovieRelease";
 import type { PersonResponse } from "../model/PersonResponse";
 import type { SaveTitleReview } from "../model/SaveTitleReview";
@@ -26,7 +27,7 @@ export async function getTitles(): Promise<MovieRelease[]> {
   return data;
 }
 
-export async function getTitlesSearch(
+export async function getTitleAndPeopleSearch(
   query: string,
   types?: string,
 ): Promise<TitleSearchResponse> {
@@ -63,6 +64,7 @@ export interface TitlesListParams {
   user_rating_high?: string;
   page?: string;
   limit?: string;
+  person_id?: string;
   useCache?: boolean;
 }
 
@@ -78,6 +80,7 @@ export async function getTitlesList(params: TitlesListParams = {}): Promise<Titl
   if (params.user_rating_high) query.set("user_rating_high", params.user_rating_high);
   if (params.page) query.set("page", params.page);
   if (params.limit) query.set("limit", params.limit);
+  if (params.person_id) query.set("person_id", params.person_id);
   query.set("useCache", String(params.useCache ?? false));
 
   const response = await fetch(`${API_BASE_URL}/titles/list?${query.toString()}`, {
@@ -161,6 +164,32 @@ export function getTitleStreamUrl(externalId: number): string {
     throw new Error("externalId is required");
   }
   return `${API_BASE_URL}/titles/${externalId}/stream`;
+}
+
+export async function getAutocompleteSearch(
+  query: string,
+): Promise<AutocompleteSearchResponse> {
+  if (!query) {
+    throw new Response("Server error", { status: 500 });
+  }
+
+  const params = new URLSearchParams({ query });
+
+  const response = await fetch(
+    `${API_BASE_URL}/titles/autocomplete-search?${params.toString()}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Could not fetch autocomplete results.");
+  }
+
+  return (await response.json()) as AutocompleteSearchResponse;
 }
 
 export async function postTitleReview(

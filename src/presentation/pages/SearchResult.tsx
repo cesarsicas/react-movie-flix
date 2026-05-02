@@ -4,17 +4,13 @@ import MoviesList from "../components/MoviesList";
 import PageContainer from "../components/PageContainer";
 import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
 import type MovieModel from "../../domain/model/MovieModel";
-import type { PersonSearchResultModel } from "../../domain/model/TitleSearchModel";
-import getTitlesSearchUseCase from "../../domain/usecases/getTitlesSearchUseCase";
+import type { AutocompleteResultModel } from "../../domain/model/AutocompleteSearchModel";
+import getAutocompleteSearchUseCase from "../../domain/usecases/getAutocompleteSearchUseCase";
+import placeholder from "../../assets/poster_placeholder.png";
 
 type FilterTab = "all" | "movies" | "tv" | "people";
 
-const FILTER_TYPES: Record<FilterTab, string | undefined> = {
-  all: undefined,
-  movies: "movie",
-  tv: "tv_series,tv_miniseries,tv_special",
-  people: undefined,
-};
+const TV_TYPES = new Set(["tv_series", "tv_miniseries", "tv_special"]);
 
 const TAB_LABELS: { key: FilterTab; label: string }[] = [
   { key: "all", label: "All" },
@@ -25,7 +21,7 @@ const TAB_LABELS: { key: FilterTab; label: string }[] = [
 
 interface LoaderData {
   titleResults: MovieModel[];
-  peopleResults: PersonSearchResultModel[];
+  peopleResults: AutocompleteResultModel[];
   query: string;
   filter: FilterTab;
 }
@@ -33,8 +29,7 @@ interface LoaderData {
 export function SearchResult() {
   const { titleResults, peopleResults, query, filter } = useLoaderData() as LoaderData;
 
-  const showTitles = filter !== "people";
-  const showPeople = filter !== "movies" && filter !== "tv";
+  const isAll = filter === "all";
 
   return (
     <PageContainer>
@@ -65,7 +60,28 @@ export function SearchResult() {
         </div>
       </div>
 
-      {showTitles && (
+      {isAll && (
+        <HomeSection title={`Results for "${query}"`}>
+          {titleResults.length === 0 && peopleResults.length === 0 ? (
+            <p className="text-gray-500">No results found.</p>
+          ) : (
+            <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
+              {titleResults.map((movie) => (
+                <Link key={`title-${movie.id}`} to={`/title/details/${movie.externalId}`}>
+                  <ResultCard name={movie.title} imageUrl={movie.posterUrl} />
+                </Link>
+              ))}
+              {peopleResults.map((person) => (
+                <Link key={`person-${person.id}`} to={`/person/${person.id}`}>
+                  <ResultCard name={person.name} imageUrl={person.image_url} />
+                </Link>
+              ))}
+            </div>
+          )}
+        </HomeSection>
+      )}
+
+      {!isAll && filter !== "people" && (
         <HomeSection title={`Title Results for "${query}"`}>
           {titleResults.length > 0 ? (
             <MoviesList movies={titleResults} />
@@ -75,12 +91,14 @@ export function SearchResult() {
         </HomeSection>
       )}
 
-      {showPeople && (
+      {!isAll && filter === "people" && (
         <HomeSection title={`People Results for "${query}"`}>
           {peopleResults.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
               {peopleResults.map((person) => (
-                <PersonCard key={person.id} person={person} />
+                <Link key={person.id} to={`/person/${person.id}`}>
+                  <ResultCard name={person.name} imageUrl={person.image_url} />
+                </Link>
               ))}
             </div>
           ) : (
@@ -92,23 +110,18 @@ export function SearchResult() {
   );
 }
 
-function PersonCard({ person }: { person: PersonSearchResultModel }) {
+function ResultCard({ name, imageUrl }: { name: string; imageUrl: string | null | undefined }) {
   return (
-    <Link to={`/person/${person.id}`}>
-      <div className="flex flex-col items-center rounded-md bg-white p-4 shadow-md transition duration-300 hover:scale-[1.02] hover:shadow-lg">
-        <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gray-200 text-2xl text-gray-500">
-          {person.name.charAt(0)}
-        </div>
-        <p className="line-clamp-2 text-center text-sm font-semibold text-gray-900">
-          {person.name}
-        </p>
-        {person.main_profession && (
-          <span className="mt-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs capitalize text-gray-600">
-            {person.main_profession}
-          </span>
-        )}
+    <div className="max-w-65 min-w-50 transform cursor-pointer overflow-hidden rounded-md bg-white shadow-xl transition duration-300 hover:scale-[1.02]">
+      <img
+        src={imageUrl || placeholder}
+        alt={name}
+        className="h-94 w-full object-cover"
+      />
+      <div className="p-3">
+        <h3 className="line-clamp-1 text-center font-semibold text-gray-900">{name}</h3>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -121,22 +134,31 @@ export async function titleSearchLoader({ request }: LoaderFunctionArgs): Promis
     throw new Response("query Parameter not found", { status: 400 });
   }
 
-  const types = FILTER_TYPES[filter];
-  const searchResult = await getTitlesSearchUseCase(query, types);
+  const { results } = await getAutocompleteSearchUseCase(query);
 
-  const titleResults: MovieModel[] = searchResult.title_results.map((item) => ({
+  const allTitles = results.filter((r) => r.result_type === "title");
+  const filteredTitles =
+    filter === "movies"
+      ? allTitles.filter((r) => r.type === "movie")
+      : filter === "tv"
+        ? allTitles.filter((r) => r.type !== null && TV_TYPES.has(r.type))
+        : allTitles;
+
+  const titleResults: MovieModel[] = filteredTitles.map((item) => ({
     id: item.id,
     externalId: item.id,
     title: item.name,
-    posterUrl: "",
+    posterUrl: item.image_url ?? "",
     description: "",
     releaseDate: item.year ? String(item.year) : "",
-    type: item.type,
+    type: item.type ?? "",
   }));
+
+  const peopleResults = results.filter((r) => r.result_type === "person");
 
   return {
     titleResults,
-    peopleResults: searchResult.people_results,
+    peopleResults,
     query,
     filter,
   };
