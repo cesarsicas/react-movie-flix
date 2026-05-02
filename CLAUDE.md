@@ -41,8 +41,10 @@ All routes and their loaders/actions are defined in `presentation/App.tsx`. Two 
 - `/` — Home (`moviesLoader`)
 - `/auth` — Login/Signup (`authformAction`)
 - `/logout` — clears user token
-- `/title/details/:externalId` — MovieDetails (`titleDetailsLoader`, `movieReviewAction`)
+- `/title/details/:externalId` — TitleDetails (`titleDetailsLoader`, `movieReviewAction`)
 - `/title/search` — SearchResult (`titleSearchLoader`)
+- `/titles` — Titles browse/filter page (`titlesLoader`)
+- `/person/:personId` — PersonDetails (`personDetailsLoader`)
 - `/profile` — Profile view (`profileLoader`)
 - `/profile/edit` — Profile edit (`profileEditLoader`, `profileEditAction`)
 - `/watch-party` — public live stream view; polls `/transmissions/current` every 5 s until a transmission is found, then stops
@@ -86,10 +88,25 @@ The same pattern applies to the profile slice. The typed hooks in `src/data/redu
 
 ---
 
+## Domain Enums
+
+Reusable enums live in `src/domain/model/`:
+
+| File | Exports | Purpose |
+|---|---|---|
+| `TitleAndPeopleSearchTypes.ts` | `TitleAndPeopleSearchTypes`, `TitleAndPeopleSearchField` | Type filters (`movie`, `tv`, `person`) and search field selectors (`name`, `imdb_id`, `tmdb_movie_id`, `tmdb_tv_id`, `tmdb_person_id`) for the search API |
+| `Genre.ts` | `Genre`, `GENRE_LIST` | All 37 genre IDs as a typed enum; `GENRE_LIST` is a `{ id, name }[]` array used to populate genre filter dropdowns |
+
+---
+
 ## Key Non-Obvious Details
 
-- **`movieReviewAction`** returns `{ ok: true, review }` and the `MovieDetails` component reads it via `useActionData()`, then appends the review to local state — the review list is not re-fetched.
+- **`movieReviewAction`** returns `{ ok: true, review }` and the `TitleDetails` component reads it via `useActionData()`, then appends the review to local state — the review list is not re-fetched.
 - **`uploadMovieUseCase`** is a mock: it resolves after 500 ms and returns dummy data. Real file upload is not implemented.
 - **HLS video** is handled by `HlsPlayer.tsx` (uses `hls.js` with a native `<video>` fallback for Safari). Title stream URL: `{BASE_URL}/titles/{externalId}/stream`. Watch Party stream: `{BASE_URL}/live/stream.m3u8`.
 - **`?useCache=true`** query param is appended to title API requests as a hint to the Spring backend to serve from its own PostgreSQL cache rather than re-fetching from the WatchMode API.
 - The `Home` loader pre-fetches both releases and profile so Redux is warm before child pages render.
+- **`TitleDetails` cast/crew** — `details.cast` contains both `Cast` and `Crew` entries. The page filters Cast by `order === 1` and Crew by `order === 1 && role.includes("Director" | "Writer")`, deduplicating by `person_id`.
+- **`getTitleAndPeopleSearch`** uses `searchValue` + `searchField` params (not `query`). The `TitleDetails` loader picks the best available ID (`imdb_id` → `tmdb_movie_id`/`tmdb_tv_id` based on `tmdb_type` → title name) to drive that search.
+- **`PersonDetails` loader** fetches person info and their titles list in parallel via `Promise.all`.
+- **`SearchResult`** uses the autocomplete endpoint (`/titles/autocomplete-search`) and does client-side filtering by `result_type` and title `type`.
