@@ -3,6 +3,7 @@ import Banner from "../components/Banner";
 import PageContainer from "../components/PageContainer";
 import { getTitlesList } from "../../data/api/titleApi";
 import type { TitleListItem } from "../../data/model/TitleListResponse";
+import { GENRE_LIST } from "../../domain/model/Genre";
 
 const TYPE_OPTIONS = [
   { value: "", label: "All Types" },
@@ -40,6 +41,7 @@ interface LoaderData {
   filters: {
     types: string;
     sort_by: string;
+    genres: string;
     user_rating_low: string;
     user_rating_high: string;
     release_date_start: string;
@@ -63,6 +65,7 @@ export default function Titles() {
     const params = new URLSearchParams();
     if (filters.types) params.set("types", filters.types);
     if (filters.sort_by) params.set("sort_by", filters.sort_by);
+    if (filters.genres) params.set("genres", filters.genres);
     if (filters.user_rating_low) params.set("user_rating_low", filters.user_rating_low);
     if (filters.user_rating_high) params.set("user_rating_high", filters.user_rating_high);
     if (filters.release_date_start) params.set("release_date_start", filters.release_date_start);
@@ -101,6 +104,18 @@ export default function Titles() {
               {SORT_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-600">Genre</label>
+            <select name="genres" defaultValue={filters.genres} className={selectClass}>
+              <option value="">All Genres</option>
+              {GENRE_LIST.map((g) => (
+                <option key={g.id} value={String(g.id)}>
+                  {g.name}
                 </option>
               ))}
             </select>
@@ -269,6 +284,7 @@ export async function titlesLoader({ request }: LoaderFunctionArgs): Promise<Loa
 
   const types = url.searchParams.get("types") || "";
   const sort_by = url.searchParams.get("sort_by") || "relevance_desc";
+  const genres = url.searchParams.get("genres") || "";
   const user_rating_low = url.searchParams.get("user_rating_low") || "";
   const user_rating_high = url.searchParams.get("user_rating_high") || "";
   const releaseYearStart = url.searchParams.get("release_date_start") || "";
@@ -281,6 +297,7 @@ export async function titlesLoader({ request }: LoaderFunctionArgs): Promise<Loa
   const response = await getTitlesList({
     types: types || undefined,
     sort_by: sort_by || undefined,
+    genres: genres || undefined,
     user_rating_low: user_rating_low || undefined,
     user_rating_high: user_rating_high || undefined,
     release_date_start: release_date_start || undefined,
@@ -296,6 +313,7 @@ export async function titlesLoader({ request }: LoaderFunctionArgs): Promise<Loa
     filters: {
       types,
       sort_by,
+      genres,
       user_rating_low,
       user_rating_high,
       release_date_start: releaseYearStart,
