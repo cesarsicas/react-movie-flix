@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
-import { checkAuthLoader } from "../../utils/auth.tsx";
-import { getAuthToken } from "../../utils/auth.tsx";
 import { API_BASE_URL } from "../../utils/Constants.ts";
-
-export { checkAuthLoader as chatLoader };
 
 interface Message {
   id: string;
@@ -39,12 +35,10 @@ export default function Chat() {
     setIsLoading(true);
 
     try {
-      const token = getAuthToken();
       const response = await fetch(`${API_BASE_URL}/default/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ message: text }),
       });

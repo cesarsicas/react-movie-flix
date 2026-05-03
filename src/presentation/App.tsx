@@ -26,7 +26,7 @@ import {
 } from "../utils/adminAuth.ts";
 import WatchPartyHome, { watchPartyHomeLoader, watchPartyHomeAction } from "./pages/WatchPartyHome.tsx";
 import WatchParty from "./pages/WatchParty.tsx";
-import Chat, { chatLoader } from "./pages/Chat.tsx";
+import Chat from "./pages/Chat.tsx";
 import NewTransmission, {
   newTransmissionLoader,
   newTransmissionAction,
@@ -66,7 +66,7 @@ const router = createBrowserRouter([
       { path: "/titles", element: <Titles />, loader: titlesLoader },
       { path: "/person/:personId", element: <PersonDetails />, loader: personDetailsLoader },
       { path: "/watch-party", element: <WatchParty /> },
-      { path: "/chat", element: <Chat />, loader: chatLoader },
+      { path: "/chat", element: <Chat /> },
     ],
   },
   {
