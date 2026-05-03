@@ -24,6 +24,12 @@ export default function AppHeader() {
       </div>
       <div className="flex w-full items-center justify-end gap-2">
         <Link
+          to="/titles"
+          className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
+        >
+          Titles
+        </Link>
+        <Link
           to="/watch-party"
           className="min-w-[120px] rounded border border-none px-6 py-2 text-center hover:bg-gray-300 focus:outline-none"
         >

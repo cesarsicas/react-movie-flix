@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
-import { getAuthToken } from "../../utils/auth.tsx";
 import { API_BASE_URL } from "../../utils/Constants.ts";
 
 interface Message {
@@ -12,9 +11,6 @@ interface Message {
 }
 
 export default function FloatingChat() {
-  const token = getAuthToken();
-  const isUserLogged = token !== "" && token !== undefined;
-
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -29,8 +25,6 @@ export default function FloatingChat() {
   useEffect(() => {
     if (isOpen) textareaRef.current?.focus();
   }, [isOpen]);
-
-  if (!isUserLogged) return null;
 
   async function sendMessage() {
     const text = input.trim();
@@ -51,7 +45,6 @@ export default function FloatingChat() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${getAuthToken()}`,
         },
         body: JSON.stringify({ message: text }),
       });
