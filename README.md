@@ -135,8 +135,8 @@ _API communication + Redux storage_
 - `src/data/api/`
 - `src/data/api/`
   REST API calls:
-  - `authApi.ts` — user user login, signup, and admin login, and admin login
-  - `titleApi.ts` — fetch titles, title details (including cast/crew/sources), autocomplete search, person search, reviews, stream URL, fetch stream URL
+  - `authApi.ts` — user login, signup, and admin login
+  - `titleApi.ts` — fetch titles, title details (including cast/crew/sources), autocomplete search, person search, reviews, stream URL
   - `defaultUserApi.ts` — user profile CRUD
   - `transmissionApi.ts` — get current transmission, start/stop transmission, fetch available movies, upload movie
   - `transmissionApi.ts` — get current transmission, start/stop transmission, fetch available movies, upload movie
