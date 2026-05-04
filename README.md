@@ -14,6 +14,12 @@ It demonstrates authentication with **JWT tokens**, a responsive UI, clean archi
 https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
 
 
+## 🎥 Preview
+
+
+https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
+
+
 
 ## 🚀 Technologies Used
 
@@ -24,6 +30,7 @@ https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
 - **Redux Toolkit** (global state + caching)
 - **Tailwind CSS** (utility-first styling)
 - **JWT Authentication** (using local storage)
+- **hls.js** (HLS video stream playback with native Safari fallback)
 - **hls.js** (HLS video stream playback with native Safari fallback)
 
 ---
@@ -126,10 +133,12 @@ _API communication + Redux storage_
 - `src/data/model/`  
   Types representing API responses and request bodies.
 - `src/data/api/`
+- `src/data/api/`
   REST API calls:
   - `authApi.ts` — user login, signup, and admin login
   - `titleApi.ts` — fetch titles, title details (including cast/crew/sources), autocomplete search, person search, reviews, stream URL
   - `defaultUserApi.ts` — user profile CRUD
+  - `transmissionApi.ts` — get current transmission, start/stop transmission, fetch available movies, upload movie
   - `transmissionApi.ts` — get current transmission, start/stop transmission, fetch available movies, upload movie
 - `src/data/redux/`  
   Redux Toolkit slices, root store configuration, and selectors.
