@@ -1,11 +1,19 @@
-export interface TitleSearchModel {
-  name: string;
-  relevance: number;
-  type: string;
+export interface TitleSearchResultModel {
   id: number;
+  name: string;
+  type: string;
   year: number;
-  result_type: string;
   tmdb_id: number;
   tmdb_type: string;
-  image_url: string;
+}
+
+export interface PersonSearchResultModel {
+  id: number;
+  name: string;
+  main_profession: string;
+}
+
+export interface TitleSearchModel {
+  title_results: TitleSearchResultModel[];
+  people_results: PersonSearchResultModel[];
 }

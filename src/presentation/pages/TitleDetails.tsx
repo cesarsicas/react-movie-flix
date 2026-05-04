@@ -4,6 +4,7 @@ import Modal from "../components/Modal";
 import { useEffect, useState } from "react";
 import ReviewForm from "../components/ReviewForm";
 import {
+  Link,
   useActionData,
   useLoaderData,
   type ActionFunctionArgs,
@@ -18,16 +19,17 @@ import VideoPlayer from "../components/VideoPlayer";
 import { getAuthToken } from "../../utils/auth";
 import saveTitleReviewUseCase from "../../domain/usecases/saveTitleReviewUseCase";
 import type ReviewModel from "../../domain/model/ReviewModel";
+import type { TitleCastMemberModel } from "../../domain/model/TitleDetailsModel";
 
 type ActionData = { ok: true; review: ReviewModel } | undefined;
 
-export function MovieDetails() {
+export function TitleDetails() {
   const loaderData = useLoaderData();
 
   const details = loaderData?.details;
   const receivedReviews = loaderData?.reviews as ReviewModel[];
   const isUserLogged = loaderData?.isUserLogged as boolean;
-  const streamUrl = loaderData?.streamUrl as string;
+  const cast = details?.cast as TitleCastMemberModel[] | undefined;
 
   const actionData = useActionData() as ActionData;
 
@@ -79,20 +81,28 @@ export function MovieDetails() {
         <div className="mt-6">
           <h2 className="text-2xl font-bold text-gray-800">Sinopsis</h2>
           <p className="mb-6">{details.plot_overview}</p>
-          <h2 className="text-2xl font-bold text-gray-800">Cast and Crew</h2>
-          <h3>Director</h3>
-          <p>Michael Chen</p>
-          <h3>Cast</h3>
-          <p className="mb-6">John Harrison, Sarah Mitchell, David Rodriguez</p>
 
-         <div className="pr-6">  
-              <h2 className="mb-4 text-2xl font-bold text-gray-800">Watch</h2>
-              <VideoPlayer streamUrl={streamUrl} />
-          </div>
+          {details.trailer && (
+            <div className="pr-6">
+              <h2 className="mb-4 text-2xl font-bold text-gray-800">Trailer</h2>
+              <div className="aspect-video w-full overflow-hidden rounded-md">
+                <iframe
+                  src={details.trailer.replace("watch?v=", "embed/")}
+                  className="h-full w-full"
+                  allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                />
+              </div>
+            </div>
+          )}
             
 
         </div>
 
+
+        <div className="mt-6">
+
+        <div className="rounded-md border-1 border-solid border-gray-300 p-4">
 
         <div className="mt-6">
 
@@ -121,12 +131,69 @@ export function MovieDetails() {
             </div>
           )}
         </div>
+
+        {cast && cast.filter((m) => m.type === "Cast" && m.order === 1).length > 0 && (
+          <div className="mt-4 rounded-md border border-gray-300 p-4">
+            <h2 className="mb-3 font-bold text-gray-800">Cast</h2>
+            <ul className="space-y-2">
+              {cast
+                .filter((m) => m.type === "Cast" && m.order === 1)
+                .map((member) => (
+                  <li key={`${member.person_id}-${member.role}`}>
+                    <Link
+                      to={`/person/${member.person_id}`}
+                      className="text-sm font-medium text-gray-900 hover:underline"
+                    >
+                      {member.full_name}
+                    </Link>
+                    <p className="text-xs text-gray-500">{member.role}</p>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+
+        {cast && cast.some((m) => m.type === "Crew" && m.order === 1 && (m.role.includes("Director") || m.role.includes("Writer"))) && (
+          <div className="mt-4 rounded-md border border-gray-300 p-4">
+            <h2 className="mb-3 font-bold text-gray-800">Crew</h2>
+
+            {(["Director", "Writer"] as const).map((roleLabel) => {
+              const members = cast
+                .filter((m) => m.type === "Crew" && m.order === 1 && m.role.includes(roleLabel))
+                .filter((m, i, arr) => arr.findIndex((x) => x.person_id === m.person_id) === i);
+
+              if (members.length === 0) return null;
+
+              return (
+                <div key={roleLabel} className="mb-3 last:mb-0">
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                    {roleLabel}
+                  </p>
+                  <p className="text-sm text-gray-900">
+                    {members.map((member, i) => (
+                      <span key={member.person_id}>
+                        <Link to={`/person/${member.person_id}`} className="hover:underline">
+                          {member.full_name}
+                        </Link>
+                        {i < members.length - 1 && ", "}
+                      </span>
+                    ))}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
         </div>
 
 
       </div>
 
-     
+
+
+      </div>
+
+      </div>
 
       <div className="mb-4">
         <h2 className="bg mb-4 text-2xl font-bold text-gray-800">
@@ -178,17 +245,17 @@ export const titleDetailsLoader: LoaderFunction = async ({ params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const details = await getTitleDetailsUseCase(Number(id));
-  const reviews = await getTitleReviewsUseCase(Number(id));
-  const { streamUrl } = getTitleStreamUseCase(Number(id));
-  console.log(getAuthToken());
+  const [details, reviews] = await Promise.all([
+    getTitleDetailsUseCase(Number(id)),
+    getTitleReviewsUseCase(Number(id)),
+  ]);
+
   const isUserLogged: boolean =
     getAuthToken() !== "" && getAuthToken() !== undefined;
 
   return {
-    details: details,
-    reviews: reviews,
-    isUserLogged: isUserLogged,
-    streamUrl: streamUrl,
+    details,
+    reviews,
+    isUserLogged,
   };
 };

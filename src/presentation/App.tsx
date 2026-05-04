@@ -3,9 +3,9 @@ import { action as logoutAction } from "./pages/Logout.tsx";
 import {
   action as movieReviewAcion,
   titleDetailsLoader,
-} from "./pages/MovieDetails.tsx";
+  TitleDetails,
+} from "./pages/TitleDetails.tsx";
 import { Home, moviesLoader } from "./pages/Home.tsx";
-import { MovieDetails } from "./pages/MovieDetails.tsx";
 import RootLayout from "./pages/RootLayout.tsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Profile, { profileLoader } from "./pages/Profile.tsx";
@@ -26,11 +26,14 @@ import {
 } from "../utils/adminAuth.ts";
 import WatchPartyHome, { watchPartyHomeLoader, watchPartyHomeAction } from "./pages/WatchPartyHome.tsx";
 import WatchParty from "./pages/WatchParty.tsx";
+import Chat from "./pages/Chat.tsx";
 import NewTransmission, {
   newTransmissionLoader,
   newTransmissionAction,
 } from "./pages/NewTransmission.tsx";
 import UploadMovie, { uploadMovieLoader } from "./pages/UploadMovie.tsx";
+import Titles, { titlesLoader } from "./pages/Titles.tsx";
+import PersonDetails, { personDetailsLoader } from "./pages/PersonDetails.tsx";
 
 const router = createBrowserRouter([
   {
@@ -44,7 +47,7 @@ const router = createBrowserRouter([
       { path: "/logout", action: logoutAction },
       {
         path: "/title/details/:externalId",
-        element: <MovieDetails />,
+        element: <TitleDetails />,
         action: movieReviewAcion,
         loader: titleDetailsLoader,
       },
@@ -60,7 +63,10 @@ const router = createBrowserRouter([
         loader: profileEditLoader,
         action: profileEditAction,
       },
+      { path: "/titles", element: <Titles />, loader: titlesLoader },
+      { path: "/person/:personId", element: <PersonDetails />, loader: personDetailsLoader },
       { path: "/watch-party", element: <WatchParty /> },
+      { path: "/chat", element: <Chat /> },
     ],
   },
   {
