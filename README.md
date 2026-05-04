@@ -1,13 +1,19 @@
 # React Flix
 
 A movie and series web application built with **React**, **TypeScript**, **Vite**, **Redux**, **React Router**, and **Tailwind CSS**.
-It demonstrates authentication with **JWT tokens**, a responsive UI, clean architecture organization, and several real-world features such as title browsing, reviews, user profile management, HLS video streaming, and a live Watch Party system with an admin control panel.
+It demonstrates authentication with **JWT tokens**, a responsive UI, clean archiftecture organization, and several real-world features such as title browsing, reviews, user profile management, HLS video streaming, and a live Watch Party system with an admin control panel.
 
 > **Important:**  
 > This frontend must be used together with the backend available in this repository:  
 > **https://github.com/cesarsicas/spring-movie-flix**
 
 ---
+## 🎥 Preview
+
+
+https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
+
+
 ## 🎥 Preview
 
 
@@ -24,6 +30,7 @@ https://github.com/user-attachments/assets/905d6a41-5f8b-4c6d-a706-fde761740fb0
 - **Redux Toolkit** (global state + caching)
 - **Tailwind CSS** (utility-first styling)
 - **JWT Authentication** (using local storage)
+- **hls.js** (HLS video stream playback with native Safari fallback)
 - **hls.js** (HLS video stream playback with native Safari fallback)
 
 ---
@@ -126,10 +133,12 @@ _API communication + Redux storage_
 - `src/data/model/`  
   Types representing API responses and request bodies.
 - `src/data/api/`
+- `src/data/api/`
   REST API calls:
-  - `authApi.ts` — user login, signup, and admin login
-  - `titleApi.ts` — fetch titles, title details (including cast/crew/sources), autocomplete search, person search, reviews, stream URL
+  - `authApi.ts` — user user login, signup, and admin login, and admin login
+  - `titleApi.ts` — fetch titles, title details (including cast/crew/sources), autocomplete search, person search, reviews, stream URL, fetch stream URL
   - `defaultUserApi.ts` — user profile CRUD
+  - `transmissionApi.ts` — get current transmission, start/stop transmission, fetch available movies, upload movie
   - `transmissionApi.ts` — get current transmission, start/stop transmission, fetch available movies, upload movie
 - `src/data/redux/`  
   Redux Toolkit slices, root store configuration, and selectors.

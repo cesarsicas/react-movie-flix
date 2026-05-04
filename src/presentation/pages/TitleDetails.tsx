@@ -14,6 +14,8 @@ import MoviewReviewItem from "../components/MovieReviewItem";
 import { capitalize } from "../../utils/StringUtils";
 import getTitleDetailsUseCase from "../../domain/usecases/getTitleDetailsUseCase";
 import getTitleReviewsUseCase from "../../domain/usecases/getTitleReviewsUseCase";
+import getTitleStreamUseCase from "../../domain/usecases/getTitleStreamUseCase";
+import VideoPlayer from "../components/VideoPlayer";
 import { getAuthToken } from "../../utils/auth";
 import saveTitleReviewUseCase from "../../domain/usecases/saveTitleReviewUseCase";
 import type ReviewModel from "../../domain/model/ReviewModel";
@@ -101,6 +103,10 @@ export function TitleDetails() {
         <div className="mt-6">
 
         <div className="rounded-md border-1 border-solid border-gray-300 p-4">
+
+        <div className="mt-6">
+
+        <div className="rounded-md border-1 border-solid border-gray-300 p-4">
           <h2 className="text mb-4 font-bold text-gray-800"> Movie details</h2>
 
           <div className="mb-2 flex w-full justify-between">
@@ -183,6 +189,11 @@ export function TitleDetails() {
 
       </div>
 
+
+
+      </div>
+
+     
 
       <div className="mb-4">
         <h2 className="bg mb-4 text-2xl font-bold text-gray-800">
