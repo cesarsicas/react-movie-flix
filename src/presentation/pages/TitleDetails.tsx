@@ -193,7 +193,7 @@ export function TitleDetails() {
 
       </div>
 
-     
+      </div>
 
       <div className="mb-4">
         <h2 className="bg mb-4 text-2xl font-bold text-gray-800">
