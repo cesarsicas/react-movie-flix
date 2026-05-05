@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
 import { API_BASE_URL } from "../../utils/Constants.ts";
 
@@ -37,9 +38,7 @@ export default function Chat() {
     try {
       const response = await fetch(`${API_BASE_URL}/default/chat`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),
       });
 
@@ -99,7 +98,6 @@ export default function Chat() {
         try {
           ({ done, value } = await reader.read());
         } catch {
-          // connection closed by server — treat as end of stream
           break;
         }
         if (done) break;
@@ -110,7 +108,6 @@ export default function Chat() {
 
         for (const line of lines) {
           if (line === "") {
-            // blank line = end of SSE event block
             if (blockEvent && blockData) dispatch(blockEvent, blockData);
             blockEvent = "";
             blockData = "";
@@ -122,17 +119,14 @@ export default function Chat() {
         }
       }
 
-      // flush any trailing block not followed by a blank line
       if (blockEvent && blockData) dispatch(blockEvent, blockData);
 
-      // ensure streaming cursor is cleared
       setMessages((prev) =>
         prev.map((m) =>
           m.id === assistantId && m.isStreaming ? { ...m, isStreaming: false } : m
         )
       );
     } catch {
-      // only replace content if nothing was received yet
       setMessages((prev) =>
         prev.map((m) => {
           if (m.id !== assistantId) return m;
@@ -155,50 +149,159 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-80px)] flex-col bg-white">
-      <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-3xl px-4 py-8">
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "calc(100vh - 84px)",
+        background: "var(--bg)",
+      }}
+    >
+      {/* Channel header */}
+      <div className="channel-strip" style={{ borderLeft: "none", borderRight: "none" }}>
+        <span className="font-crt" style={{ color: "var(--amber)" }}>CH 88</span>
+        <span>ASK FLIX · AI MOVIE ASSISTANT</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span className="rec-dot" />
+          <span className="font-crt" style={{ fontSize: 13, color: "var(--red)" }}>ONLINE</span>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div style={{ flex: 1, overflowY: "auto" }}>
+        <div style={{ maxWidth: 760, margin: "0 auto", padding: "32px 24px" }}>
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-24 text-center">
-              <h2 className="text-3xl font-bold text-gray-800">Ask Flix</h2>
-              <p className="mt-3 max-w-sm text-gray-500">
-                Get movie recommendations, check what's streaming, or discover
-                something new.
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingTop: 80,
+                gap: 20,
+                textAlign: "center",
+              }}
+            >
+              <div
+                className="font-display"
+                style={{ fontSize: "clamp(40px, 5vw, 64px)", color: "var(--amber)", lineHeight: 0.9 }}
+              >
+                ASK FLIX
+              </div>
+              <p className="font-crt muted" style={{ fontSize: 18, letterSpacing: "0.08em" }}>
+                CH 88 · AI MOVIE ASSISTANT
               </p>
+              <p className="muted" style={{ fontSize: 13, lineHeight: 1.7, maxWidth: 420 }}>
+                Ask me for movie recommendations, check what's streaming,<br />
+                discover something new, or find out about cast and crew.
+              </p>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginTop: 8 }}>
+                {[
+                  "What's a good horror film?",
+                  "Recommend a 90s comedy",
+                  "Movies like Blade Runner",
+                ].map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    className="chip"
+                    onClick={() => {
+                      setInput(suggestion);
+                      setTimeout(() => textareaRef.current?.focus(), 0);
+                    }}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                  style={{
+                    display: "flex",
+                    justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+                  }}
                 >
+                  {msg.role === "assistant" && (
+                    <div
+                      className="font-crt"
+                      style={{
+                        width: 32,
+                        height: 32,
+                        flexShrink: 0,
+                        background: "var(--amber)",
+                        color: "var(--ink)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 14,
+                        marginRight: 10,
+                        alignSelf: "flex-end",
+                      }}
+                    >
+                      ▶
+                    </div>
+                  )}
                   <div
-                    className={`max-w-[80%] rounded-2xl px-5 py-3 text-sm leading-relaxed ${
-                      msg.role === "user"
-                        ? "bg-gray-800 text-white"
-                        : "bg-gray-100 text-gray-900"
-                    }`}
+                    style={{
+                      maxWidth: "80%",
+                      padding: "10px 14px",
+                      fontSize: 13,
+                      lineHeight: 1.6,
+                      background: msg.role === "user" ? "var(--amber)" : "var(--bg-2)",
+                      color: msg.role === "user" ? "var(--ink)" : "var(--label)",
+                      border: "1px solid var(--line)",
+                    }}
                   >
-                    <div className="whitespace-pre-wrap">
+                    <div style={{ whiteSpace: "pre-wrap" }}>
                       <Markdown
                         components={{
-                          a: ({ href, children }) => (
-                            <a href={href} className="text-blue-600 underline hover:text-blue-800">
-                              {children}
-                            </a>
-                          ),
-                          img: ({ src, alt }) => (
-                            <img src={src} alt={alt} className="mb-2 h-36 rounded-lg object-cover shadow" />
-                          ),
-                          p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+                          a: ({ href, children }) => {
+                            if (!href) return <>{children}</>;
+                            try {
+                              const url = new URL(href);
+                              if (url.hostname === window.location.hostname) {
+                                return (
+                                  <Link to={url.pathname + url.search + url.hash} className="link">
+                                    {children}
+                                  </Link>
+                                );
+                              }
+                            } catch {
+                              if (href.startsWith("/")) {
+                                return (
+                                  <Link to={href} className="link">
+                                    {children}
+                                  </Link>
+                                );
+                              }
+                            }
+                            return (
+                              <a href={href} target="_blank" rel="noreferrer" className="link">
+                                {children}
+                              </a>
+                            );
+                          },
+                          p: ({ children }) => <p style={{ marginBottom: 4 }}>{children}</p>,
                         }}
                       >
                         {msg.content}
                       </Markdown>
                     </div>
                     {msg.isStreaming && (
-                      <span className="ml-1 inline-block h-[14px] w-[2px] animate-pulse bg-gray-500 align-middle" />
+                      <span
+                        className="blink"
+                        style={{
+                          display: "inline-block",
+                          width: 6,
+                          height: 12,
+                          background: "var(--amber)",
+                          marginLeft: 4,
+                          verticalAlign: "middle",
+                        }}
+                      />
                     )}
                   </div>
                 </div>
@@ -209,30 +312,50 @@ export default function Chat() {
         </div>
       </div>
 
-      <div className="border-t border-gray-200 bg-white px-4 py-4">
-        <div className="mx-auto flex max-w-3xl items-end gap-3">
+      {/* Input bar */}
+      <div
+        className="panel"
+        style={{
+          borderLeft: "none",
+          borderRight: "none",
+          borderBottom: "none",
+          padding: "12px 24px",
+        }}
+      >
+        <div style={{ maxWidth: 760, margin: "0 auto", display: "flex", gap: 10, alignItems: "flex-end" }}>
           <textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Message Flix..."
+            placeholder="Message Flix…"
             rows={1}
             disabled={isLoading}
-            className="flex-1 resize-none rounded-2xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm leading-relaxed focus:border-gray-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="input"
+            style={{
+              flex: 1,
+              resize: "none",
+              padding: "10px 12px",
+              opacity: isLoading ? 0.5 : 1,
+            }}
           />
           <button
             onClick={sendMessage}
             disabled={isLoading || !input.trim()}
-            className="shrink-0 rounded-2xl bg-gray-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="btn btn-primary"
+            style={{ opacity: isLoading || !input.trim() ? 0.4 : 1, whiteSpace: "nowrap" }}
           >
-            {isLoading ? "..." : "Send"}
+            {isLoading ? "…" : "Send ▶"}
           </button>
         </div>
-        <p className="mt-2 text-center text-xs text-gray-400">
-          Enter to send · Shift+Enter for new line
+        <p className="muted" style={{ textAlign: "center", fontSize: 11, marginTop: 8, letterSpacing: "0.1em" }}>
+          ENTER TO SEND · SHIFT+ENTER FOR NEW LINE
         </p>
       </div>
     </div>
   );
+}
+
+export async function chatLoader() {
+  return null;
 }

@@ -1,5 +1,4 @@
 import { Form, Link, useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
-import Banner from "../components/Banner";
 import PageContainer from "../components/PageContainer";
 import { getTitlesList } from "../../data/api/titleApi";
 import type { TitleListItem } from "../../data/model/TitleListResponse";
@@ -28,10 +27,10 @@ const SORT_OPTIONS = [
 
 const TYPE_LABELS: Record<string, string> = {
   movie: "Movie",
-  tv_series: "TV Series",
-  tv_special: "TV Special",
-  tv_miniseries: "Miniseries",
-  short_film: "Short Film",
+  tv_series: "TV",
+  tv_special: "TV Spc",
+  tv_miniseries: "Mini",
+  short_film: "Short",
 };
 
 interface LoaderData {
@@ -51,11 +50,6 @@ interface LoaderData {
     page: string;
   };
 }
-
-const selectClass =
-  "rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-gray-500 focus:outline-none";
-const inputClass =
-  "w-20 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-gray-500 focus:outline-none";
 
 export default function Titles() {
   const { titles, page, total_pages, total_results, genres, filters } =
@@ -78,205 +72,193 @@ export default function Titles() {
 
   return (
     <PageContainer>
-      <Banner>
-        <div className="flex h-[30vh] w-full flex-col items-center justify-center text-center text-white">
-          <h1 className="mb-2 text-5xl md:text-6xl">Titles</h1>
-          <p className="text-lg text-gray-200 md:text-xl">
-            Browse and filter the full catalog
-          </p>
+      {/* Page header */}
+      <div style={{ marginBottom: 24 }}>
+        <div className="section-title">
+          <span className="num">CH 02</span>
+          Browse Titles
         </div>
-      </Banner>
+      </div>
 
-      <div className="bg-gray-100 px-8 py-6">
-        <Form method="get" action="/titles" className="flex flex-wrap items-end gap-4">
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">Type</label>
-            <select name="types" defaultValue={filters.types} className={selectClass}>
+      {/* Filter bar */}
+      <div className="panel" style={{ padding: 20, marginBottom: 20 }}>
+        <Form method="get" action="/titles" style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "flex-end" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label className="muted" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em" }}>Type</label>
+            <select name="types" defaultValue={filters.types} className="select" style={{ width: "auto", minWidth: 130 }}>
               {TYPE_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">Sort By</label>
-            <select name="sort_by" defaultValue={filters.sort_by} className={selectClass}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label className="muted" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em" }}>Sort By</label>
+            <select name="sort_by" defaultValue={filters.sort_by} className="select" style={{ width: "auto", minWidth: 160 }}>
               {SORT_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">Genre</label>
-            <select name="genres" defaultValue={filters.genres} className={selectClass}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label className="muted" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em" }}>Genre</label>
+            <select name="genres" defaultValue={filters.genres} className="select" style={{ width: "auto", minWidth: 130 }}>
               <option value="">All Genres</option>
               {genres.map((g) => (
-                <option key={g.id} value={String(g.externalId)}>
-                  {g.name}
-                </option>
+                <option key={g.id} value={String(g.externalId)}>{g.name}</option>
               ))}
             </select>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">Rating (0–10)</label>
-            <div className="flex items-center gap-1">
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label className="muted" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em" }}>Rating (0–10)</label>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <input
-                type="number"
-                name="user_rating_low"
-                placeholder="Min"
-                min="0"
-                max="10"
-                step="0.1"
+                type="number" name="user_rating_low" placeholder="Min"
+                min="0" max="10" step="0.1"
                 defaultValue={filters.user_rating_low}
-                className={inputClass}
+                className="input" style={{ width: 68 }}
               />
-              <span className="text-gray-500">–</span>
+              <span className="muted">–</span>
               <input
-                type="number"
-                name="user_rating_high"
-                placeholder="Max"
-                min="0"
-                max="10"
-                step="0.1"
+                type="number" name="user_rating_high" placeholder="Max"
+                min="0" max="10" step="0.1"
                 defaultValue={filters.user_rating_high}
-                className={inputClass}
+                className="input" style={{ width: 68 }}
               />
             </div>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">Release Year</label>
-            <div className="flex items-center gap-1">
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label className="muted" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em" }}>Release Year</label>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <input
-                type="number"
-                name="release_date_start"
-                placeholder="From"
-                min="1900"
-                max="2099"
+                type="number" name="release_date_start" placeholder="From"
+                min="1900" max="2099"
                 defaultValue={filters.release_date_start}
-                className={inputClass}
+                className="input" style={{ width: 80 }}
               />
-              <span className="text-gray-500">–</span>
+              <span className="muted">–</span>
               <input
-                type="number"
-                name="release_date_end"
-                placeholder="To"
-                min="1900"
-                max="2099"
+                type="number" name="release_date_end" placeholder="To"
+                min="1900" max="2099"
                 defaultValue={filters.release_date_end}
-                className={inputClass}
+                className="input" style={{ width: 80 }}
               />
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="rounded-md bg-gray-800 px-5 py-2 text-sm font-medium text-white hover:bg-gray-700"
-          >
-            Apply
+          <button type="submit" className="btn btn-primary btn-sm">
+            Apply ▶
           </button>
         </Form>
       </div>
 
-      <div className="bg-gray-100 px-8 pb-8">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-800">
-            Results{total_results > 0 ? ` (${total_results.toLocaleString()})` : ""}
-          </h2>
-          {hasPagination && (
-            <span className="text-sm text-gray-500">
-              Page {page} of {total_pages!.toLocaleString()}
+      {/* Results header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <div className="section-title" style={{ margin: 0 }}>
+          Results
+          {total_results > 0 && (
+            <span className="font-crt muted" style={{ fontSize: 13 }}>
+              ({total_results.toLocaleString()})
             </span>
           )}
         </div>
-
-        {titles.length > 0 ? (
-          <>
-            <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                    <th className="px-4 py-3">#</th>
-                    <th className="px-4 py-3">Title</th>
-                    <th className="px-4 py-3">Type</th>
-                    <th className="px-4 py-3">Year</th>
-                    <th className="px-4 py-3">IMDb</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {titles.map((item, index) => (
-                    <tr
-                      key={item.id}
-                      className="transition-colors hover:bg-gray-50"
-                    >
-                      <td className="px-4 py-3 text-gray-400">
-                        {((Number(filters.page) - 1) * 250) + index + 1}
-                      </td>
-                      <td className="px-4 py-3">
-                        <Link
-                          to={`/title/details/${item.externalId}`}
-                          className="font-medium text-gray-900 hover:text-blue-600 hover:underline"
-                        >
-                          {item.title}
-                        </Link>
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-                          {TYPE_LABELS[item.type] ?? item.type}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-gray-600">{item.year ?? "—"}</td>
-                      <td className="px-4 py-3 font-mono text-xs text-gray-500">
-                        {item.imdb_id ?? "—"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {hasPagination && (
-              <div className="mt-4 flex items-center justify-center gap-4">
-                {page! > 1 ? (
-                  <Link
-                    to={buildPageUrl(page! - 1)}
-                    className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm hover:bg-gray-100"
-                  >
-                    ← Prev
-                  </Link>
-                ) : (
-                  <span className="rounded-md border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-400">
-                    ← Prev
-                  </span>
-                )}
-                <span className="text-sm text-gray-600">
-                  Page {page} of {total_pages!.toLocaleString()}
-                </span>
-                {page! < total_pages! ? (
-                  <Link
-                    to={buildPageUrl(page! + 1)}
-                    className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm hover:bg-gray-100"
-                  >
-                    Next →
-                  </Link>
-                ) : (
-                  <span className="rounded-md border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-400">
-                    Next →
-                  </span>
-                )}
-              </div>
-            )}
-          </>
-        ) : (
-          <p className="text-gray-500">No titles found for the selected filters.</p>
+        {hasPagination && (
+          <span className="font-crt muted" style={{ fontSize: 13 }}>
+            PG {page} / {total_pages!.toLocaleString()}
+          </span>
         )}
       </div>
+
+      {/* Table */}
+      {titles.length > 0 ? (
+        <>
+          <div className="panel" style={{ overflow: "hidden", marginBottom: 20 }}>
+            <table style={{ width: "100%", fontSize: 13, borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid var(--line-strong)" }}>
+                  {["#", "Title", "Type", "Year", "IMDb ID"].map((h) => (
+                    <th
+                      key={h}
+                      style={{
+                        padding: "10px 14px",
+                        textAlign: "left",
+                        fontSize: 11,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.12em",
+                        color: "var(--label-dim)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {titles.map((item, index) => (
+                  <tr
+                    key={item.id}
+                    style={{ borderBottom: "1px solid var(--line)", transition: "background 0.1s" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-3)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "")}
+                  >
+                    <td style={{ padding: "10px 14px", color: "var(--label-dim)", fontFamily: "'VT323', monospace", fontSize: 15 }}>
+                      {(Number(filters.page) - 1) * 250 + index + 1}
+                    </td>
+                    <td style={{ padding: "10px 14px" }}>
+                      <Link to={`/title/details/${item.externalId}`} className="link" style={{ fontSize: 13 }}>
+                        {item.title}
+                      </Link>
+                    </td>
+                    <td style={{ padding: "10px 14px" }}>
+                      <span className="chip" style={{ fontSize: 10, padding: "2px 6px", cursor: "default" }}>
+                        {TYPE_LABELS[item.type] ?? item.type}
+                      </span>
+                    </td>
+                    <td style={{ padding: "10px 14px", color: "var(--label-dim)" }}>
+                      {item.year ?? "—"}
+                    </td>
+                    <td style={{ padding: "10px 14px" }}>
+                      <span className="font-mono muted" style={{ fontSize: 11 }}>
+                        {item.imdb_id ?? "—"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {hasPagination && (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16, marginBottom: 40 }}>
+              {page! > 1 ? (
+                <Link to={buildPageUrl(page! - 1)} className="btn btn-ghost btn-sm">
+                  ← Prev
+                </Link>
+              ) : (
+                <span className="btn btn-ghost btn-sm" style={{ opacity: 0.3, cursor: "default" }}>← Prev</span>
+              )}
+              <span className="font-crt muted" style={{ fontSize: 16 }}>
+                {page} / {total_pages!.toLocaleString()}
+              </span>
+              {page! < total_pages! ? (
+                <Link to={buildPageUrl(page! + 1)} className="btn btn-ghost btn-sm">
+                  Next →
+                </Link>
+              ) : (
+                <span className="btn btn-ghost btn-sm" style={{ opacity: 0.3, cursor: "default" }}>Next →</span>
+              )}
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="dashed-box muted" style={{ textAlign: "center", padding: 40 }}>
+          No titles found for the selected filters.
+        </div>
+      )}
     </PageContainer>
   );
 }

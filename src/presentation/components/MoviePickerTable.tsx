@@ -8,41 +8,65 @@ interface Props {
 
 export default function MoviePickerTable({ movies, isSubmitting }: Props) {
   return (
-    <table className="w-full border-collapse text-sm">
-      <thead>
-        <tr className="border-b border-gray-200 text-left text-gray-500">
-          <th className="pb-3 pr-4 font-medium">Title</th>
-          <th className="pb-3 pr-4 font-medium">Duration</th>
-          <th className="pb-3 pr-4 font-medium">Filename</th>
-          <th className="pb-3 font-medium">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {movies.map((movie) => {
-          const hours = Math.floor(movie.duration / 60);
-          const mins = movie.duration % 60;
-          const duration = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
-          return (
-            <tr key={movie.id} className="border-b border-gray-100 even:bg-gray-50">
-              <td className="py-3 pr-4">{movie.title}</td>
-              <td className="py-3 pr-4 text-gray-600">{duration}</td>
-              <td className="py-3 pr-4 font-mono text-gray-500">{movie.filename}</td>
-              <td className="py-3">
-                <Form method="post">
-                  <input type="hidden" name="movieId" value={movie.id} />
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="rounded bg-slate-800 px-3 py-1 text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    Select
-                  </button>
-                </Form>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <div className="panel" style={{ overflow: "hidden" }}>
+      <table style={{ width: "100%", fontSize: 13, borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ borderBottom: "1px solid var(--line-strong)" }}>
+            {["Title", "Duration", "Filename", "Action"].map((h) => (
+              <th
+                key={h}
+                style={{
+                  padding: "10px 14px",
+                  textAlign: "left",
+                  fontSize: 11,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  color: "var(--label-dim)",
+                  fontWeight: 600,
+                }}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {movies.map((movie) => {
+            const hours = Math.floor(movie.duration / 60);
+            const mins = movie.duration % 60;
+            const duration = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+            return (
+              <tr
+                key={movie.id}
+                style={{ borderBottom: "1px solid var(--line)", transition: "background 0.1s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-3)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "")}
+              >
+                <td style={{ padding: "10px 14px", fontWeight: 500 }}>{movie.title}</td>
+                <td style={{ padding: "10px 14px" }}>
+                  <span className="font-crt muted" style={{ fontSize: 15 }}>{duration}</span>
+                </td>
+                <td style={{ padding: "10px 14px" }}>
+                  <span className="font-mono muted" style={{ fontSize: 11 }}>{movie.filename}</span>
+                </td>
+                <td style={{ padding: "10px 14px" }}>
+                  <Form method="post">
+                    <input type="hidden" name="movieId" value={movie.id} />
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn btn-primary btn-sm"
+                      style={{ opacity: isSubmitting ? 0.5 : 1 }}
+                    >
+                      ▶ Select
+                    </button>
+                  </Form>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }

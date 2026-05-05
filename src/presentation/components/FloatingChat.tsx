@@ -43,9 +43,7 @@ export default function FloatingChat() {
     try {
       const response = await fetch(`${API_BASE_URL}/default/chat`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),
       });
 
@@ -139,7 +137,11 @@ export default function FloatingChat() {
           if (m.id !== assistantId) return m;
           return m.content
             ? { ...m, isStreaming: false }
-            : { ...m, content: "Failed to get a response. Please try again.", isStreaming: false };
+            : {
+                ...m,
+                content: "Failed to get a response. Please try again.",
+                isStreaming: false,
+              };
         })
       );
     } finally {
@@ -156,50 +158,89 @@ export default function FloatingChat() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div
+      style={{
+        position: "fixed",
+        bottom: 24,
+        right: 24,
+        zIndex: 60,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+        gap: 8,
+      }}
+    >
+      {/* Chat panel */}
       {isOpen && (
-        <div className="flex h-[520px] w-[380px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
+        <div
+          className="panel"
+          style={{
+            width: 360,
+            height: 480,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            boxShadow: "4px 4px 0 rgba(0,0,0,0.5)",
+          }}
+        >
           {/* Header */}
-          <div className="flex items-center justify-between bg-gray-800 px-4 py-3">
-            <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-              </svg>
-              <span className="font-semibold text-white">Ask Flix</span>
-            </div>
+          <div className="channel-strip">
+            <span className="font-crt" style={{ color: "var(--amber)" }}>CH 88</span>
+            <span>ASK FLIX · AI ASSISTANT</span>
             <button
               onClick={() => setIsOpen(false)}
-              className="rounded-full p-1 text-white/80 transition hover:bg-white/20 hover:text-white"
+              className="btn btn-sm btn-ghost"
+              style={{ padding: "2px 6px" }}
             >
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              ✕
             </button>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-4">
+          <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
             {messages.length === 0 ? (
-              <div className="flex h-full flex-col items-center justify-center text-center">
-                <p className="text-sm text-gray-500">
-                  Get movie recommendations, check what's streaming, or discover something new.
+              <div
+                style={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                  gap: 8,
+                }}
+              >
+                <div className="font-crt" style={{ fontSize: 32, color: "var(--amber)" }}>
+                  ▶ FLIX
+                </div>
+                <p className="muted" style={{ fontSize: 12, lineHeight: 1.6 }}>
+                  Ask me about movies, recommendations,<br />or what's streaming.
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                    style={{
+                      display: "flex",
+                      justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+                    }}
                   >
                     <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm leading-relaxed ${
-                        msg.role === "user"
-                          ? "bg-gray-800 text-white"
-                          : "bg-gray-100 text-gray-900"
-                      }`}
+                      style={{
+                        maxWidth: "85%",
+                        padding: "8px 12px",
+                        fontSize: 13,
+                        lineHeight: 1.5,
+                        background:
+                          msg.role === "user" ? "var(--amber)" : "var(--bg-3)",
+                        color:
+                          msg.role === "user" ? "var(--ink)" : "var(--label)",
+                        border: "1px solid var(--line)",
+                      }}
                     >
-                      <div className="whitespace-pre-wrap">
+                      <div style={{ whiteSpace: "pre-wrap" }}>
                         <Markdown
                           components={{
                             a: ({ href, children }) => {
@@ -208,35 +249,48 @@ export default function FloatingChat() {
                                 const url = new URL(href);
                                 if (url.hostname === window.location.hostname) {
                                   return (
-                                    <Link to={url.pathname + url.search + url.hash} className="underline opacity-90 hover:opacity-100">
+                                    <Link to={url.pathname + url.search + url.hash} className="link">
                                       {children}
                                     </Link>
                                   );
                                 }
                               } catch {
-                                // relative path like "/title/details/1"
                                 if (href.startsWith("/")) {
                                   return (
-                                    <Link to={href} className="underline opacity-90 hover:opacity-100">
+                                    <Link to={href} className="link">
                                       {children}
                                     </Link>
                                   );
                                 }
                               }
                               return (
-                                <a href={href} target="_blank" rel="noreferrer" className="underline opacity-90 hover:opacity-100">
+                                <a href={href} target="_blank" rel="noreferrer" className="link">
                                   {children}
                                 </a>
                               );
                             },
-                            p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+                            p: ({ children }) => (
+                              <p style={{ marginBottom: 4 }}>
+                                {children}
+                              </p>
+                            ),
                           }}
                         >
                           {msg.content}
                         </Markdown>
                       </div>
                       {msg.isStreaming && (
-                        <span className="ml-1 inline-block h-[12px] w-[2px] animate-pulse bg-gray-400 align-middle" />
+                        <span
+                          className="blink"
+                          style={{
+                            display: "inline-block",
+                            width: 6,
+                            height: 12,
+                            background: "var(--amber)",
+                            marginLeft: 4,
+                            verticalAlign: "middle",
+                          }}
+                        />
                       )}
                     </div>
                   </div>
@@ -247,44 +301,62 @@ export default function FloatingChat() {
           </div>
 
           {/* Input */}
-          <div className="border-t border-gray-200 px-3 py-3">
-            <div className="flex items-end gap-2">
-              <textarea
-                ref={textareaRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Message Flix..."
-                rows={1}
-                disabled={isLoading}
-                className="flex-1 resize-none rounded-xl border border-gray-300 bg-gray-50 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none disabled:opacity-50"
-              />
-              <button
-                onClick={sendMessage}
-                disabled={isLoading || !input.trim()}
-                className="shrink-0 rounded-xl bg-gray-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-700 disabled:opacity-40"
-              >
-                {isLoading ? "..." : "Send"}
-              </button>
-            </div>
+          <div
+            style={{
+              borderTop: "1px solid var(--line-strong)",
+              padding: 12,
+              display: "flex",
+              gap: 8,
+              alignItems: "flex-end",
+            }}
+          >
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Message Flix…"
+              rows={1}
+              disabled={isLoading}
+              className="input"
+              style={{
+                flex: 1,
+                resize: "none",
+                padding: "8px 10px",
+                fontSize: 13,
+                opacity: isLoading ? 0.5 : 1,
+              }}
+            />
+            <button
+              onClick={sendMessage}
+              disabled={isLoading || !input.trim()}
+              className="btn btn-primary btn-sm"
+              style={{ whiteSpace: "nowrap", opacity: isLoading || !input.trim() ? 0.4 : 1 }}
+            >
+              {isLoading ? "…" : "Send"}
+            </button>
           </div>
         </div>
       )}
 
-      {/* Floating toggle button */}
+      {/* Toggle button */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-800 text-white shadow-lg transition hover:bg-gray-700"
+        className="btn"
+        style={{
+          width: 54,
+          height: 54,
+          padding: 0,
+          justifyContent: "center",
+          background: isOpen ? "var(--amber)" : "var(--bg-2)",
+          borderColor: isOpen ? "var(--amber)" : "var(--label)",
+          color: isOpen ? "var(--ink)" : "var(--label)",
+          fontSize: 20,
+          boxShadow: "3px 3px 0 rgba(0,0,0,0.4)",
+        }}
+        title="Ask Flix"
       >
-        {isOpen ? (
-          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-          </svg>
-        )}
+        {isOpen ? "✕" : "▶"}
       </button>
     </div>
   );

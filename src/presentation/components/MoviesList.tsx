@@ -5,18 +5,21 @@ import type MovieModel from "../../domain/model/MovieModel";
 
 const MoviesList: React.FC<
   React.PropsWithChildren<{ movies: MovieModel[] }>
-> = (props) => {
+> = ({ movies }) => {
   return (
-    <div className="">
-      <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
-        {props.movies.map((movie) => {
-          return (
-            <Link key={movie.id} to={`/title/details/${movie.externalId}`}>
-              <MovieItem movie={movie} showBottomInfo={true} />
-            </Link>
-          );
-        })}
-      </div>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: 14,
+      }}
+      className="sm:grid-cols-4 lg:grid-cols-6"
+    >
+      {movies.map((movie) => (
+        <Link key={movie.id} to={`/title/details/${movie.externalId}`} style={{ textDecoration: "none" }}>
+          <MovieItem movie={movie} showBottomInfo={true} />
+        </Link>
+      ))}
     </div>
   );
 };

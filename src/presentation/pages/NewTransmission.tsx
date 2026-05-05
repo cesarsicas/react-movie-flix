@@ -33,14 +33,22 @@ export default function NewTransmission() {
 
   return (
     <PageContainer>
-      <h1 className="mb-6 text-3xl font-bold">New Transmission</h1>
+      <div style={{ marginBottom: 24 }}>
+        <div className="section-title">
+          <span className="num">CH 77</span>
+          New Transmission
+        </div>
+      </div>
+
       <input
         type="text"
-        placeholder="Search movies..."
+        placeholder="Search movies…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="mb-6 w-full max-w-sm rounded border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+        className="input"
+        style={{ maxWidth: 360, marginBottom: 20 }}
       />
+
       <MoviePickerTable movies={filtered} isSubmitting={isSubmitting} />
     </PageContainer>
   );

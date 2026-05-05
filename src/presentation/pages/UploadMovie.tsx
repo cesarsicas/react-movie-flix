@@ -44,10 +44,7 @@ export default function UploadMovie() {
 
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(interval);
-          return prev;
-        }
+        if (prev >= 90) { clearInterval(interval); return prev; }
         return prev + 5;
       });
     }, 80);
@@ -67,12 +64,29 @@ export default function UploadMovie() {
 
   return (
     <PageContainer>
-      <h1 className="mb-6 text-3xl font-bold">Upload Movie</h1>
-      <form onSubmit={handleSubmit} className="max-w-lg space-y-6">
+      <div style={{ marginBottom: 24 }}>
+        <div className="section-title">
+          <span className="num">CH 77</span>
+          Upload Movie
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} style={{ maxWidth: 520, display: "flex", flexDirection: "column", gap: 20 }}>
+        {/* Drop zone */}
         <div
-          className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 transition-colors ${
-            isDragOver ? "border-slate-500 bg-slate-50" : "border-gray-300 hover:border-slate-400"
-          }`}
+          className="dashed-box"
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 48,
+            background: isDragOver ? "var(--bg-3)" : "transparent",
+            borderColor: isDragOver ? "var(--amber)" : undefined,
+            transition: "background 0.15s, border-color 0.15s",
+            textAlign: "center",
+          }}
           onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
           onDragLeave={() => setIsDragOver(false)}
           onDrop={handleDrop}
@@ -82,53 +96,61 @@ export default function UploadMovie() {
             ref={fileInputRef}
             type="file"
             accept=".mp4,.mkv"
-            className="hidden"
+            style={{ display: "none" }}
             onChange={(e) => { if (e.target.files?.[0]) handleFileSelect(e.target.files[0]); }}
           />
           {file ? (
-            <p className="text-sm font-medium text-slate-700">{file.name}</p>
+            <p className="font-mono" style={{ fontSize: 13, color: "var(--amber)" }}>{file.name}</p>
           ) : (
             <>
-              <p className="text-gray-500">Drag & drop a file here, or click to browse</p>
-              <p className="mt-1 text-xs text-gray-400">Accepted: .mp4, .mkv</p>
+              <div className="font-crt" style={{ fontSize: 32, color: "var(--label-dim)", marginBottom: 8 }}>⬆</div>
+              <p className="muted" style={{ fontSize: 13 }}>Drag & drop a file here, or click to browse</p>
+              <p className="muted" style={{ fontSize: 11, marginTop: 4 }}>Accepted: .mp4, .mkv</p>
             </>
           )}
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Title</label>
+        {/* Title input */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <label className="muted" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em" }}>
+            Title
+          </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Movie title"
-            className="w-full rounded border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+            className="input"
           />
         </div>
 
+        {/* Progress bar */}
         {isUploading && (
           <div>
-            <div className="mb-1 flex justify-between text-xs text-gray-500">
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--label-dim)", marginBottom: 6 }}>
               <span>Uploading…</span>
-              <span>{progress}%</span>
+              <span className="font-crt">{progress}%</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+            <div style={{ height: 4, background: "var(--bg-3)", overflow: "hidden" }}>
               <div
-                className="h-full bg-slate-700 transition-all duration-75"
-                style={{ width: `${progress}%` }}
+                className="bar-amber"
+                style={{ height: "100%", width: `${progress}%`, transition: "width 0.1s" }}
               />
             </div>
           </div>
         )}
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && (
+          <p style={{ color: "var(--red)", fontSize: 12 }}>{error}</p>
+        )}
 
         <button
           type="submit"
           disabled={isUploading}
-          className="rounded bg-slate-800 px-6 py-2 text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="btn btn-primary"
+          style={{ opacity: isUploading ? 0.5 : 1 }}
         >
-          {isUploading ? "Uploading…" : "Upload"}
+          {isUploading ? "Uploading…" : "⬆ Upload"}
         </button>
       </form>
     </PageContainer>

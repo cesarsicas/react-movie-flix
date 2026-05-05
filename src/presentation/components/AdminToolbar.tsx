@@ -4,26 +4,47 @@ export default function AdminToolbar() {
   const tokenData = useRouteLoaderData("admin-root");
 
   return (
-    <header className="flex items-center justify-between px-16 py-4 bg-slate-800 text-white">
-      <div className="flex items-center gap-8">
-        <Link to="/admin/home">
-          <h1 className="text-2xl font-bold">ReactFlix Admin</h1>
+    <header style={{ position: "sticky", top: 0, zIndex: 50 }}>
+      <nav
+        className="panel"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "auto 1fr auto",
+          alignItems: "center",
+          gap: 24,
+          padding: "0 28px",
+          borderTop: "none",
+          borderLeft: "none",
+          borderRight: "none",
+        }}
+      >
+        {/* Logo */}
+        <Link to="/admin/home" style={{ textDecoration: "none" }}>
+          <span className="font-display" style={{ fontSize: 18, color: "var(--amber)" }}>
+            ▶ REACTFLIX
+          </span>
+          <span className="sticker flat" style={{ fontSize: 11, marginLeft: 8 }}>ADMIN</span>
         </Link>
+
+        {/* Nav */}
         {tokenData && (
-          <nav className="flex items-center gap-6 text-sm">
-            <Link to="/admin/watch-party" className="hover:text-slate-300">
+          <div style={{ display: "flex", gap: 4, alignItems: "center", padding: "8px 0" }}>
+            <Link to="/admin/home" className="btn btn-sm btn-ghost">
+              Dashboard
+            </Link>
+            <Link to="/admin/watch-party" className="btn btn-sm btn-ghost">
               Watch Party
             </Link>
-          </nav>
+          </div>
         )}
-      </div>
-      {tokenData && (
-        <Form action="/admin/logout" method="post">
-          <button className="min-w-[120px] rounded border border-white px-6 py-2 text-center hover:bg-slate-700 focus:outline-none">
-            Logout
-          </button>
-        </Form>
-      )}
+
+        {/* Logout */}
+        {tokenData && (
+          <Form action="/admin/logout" method="post">
+            <button className="btn btn-sm btn-ghost">Logout</button>
+          </Form>
+        )}
+      </nav>
     </header>
   );
 }

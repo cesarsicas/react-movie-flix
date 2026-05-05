@@ -1,27 +1,49 @@
-import placeholder from "../../assets/poster_placeholder.png";
 import type MovieModel from "../../domain/model/MovieModel";
 
 const MovieItem: React.FC<
-  React.PropsWithChildren<{ movie: MovieModel; showBottomInfo: Boolean }>
-> = (props) => {
+  React.PropsWithChildren<{ movie: MovieModel; showBottomInfo: Boolean; size?: "sm" | "md" }>
+> = ({ movie, showBottomInfo, size = "md" }) => {
   return (
-    <div
-      key={props.movie.id}
-      className="max-w-65 min-w-50 transform cursor-pointer overflow-hidden rounded-md bg-white shadow-xl transition duration-300 hover:scale-[1.02]"
-    >
-      <img
-        src={props.movie.posterUrl ? props.movie.posterUrl : placeholder}
-        alt={`Poster for ${props.movie.title}`}
-        className="h-94 w-full object-cover"
-      />
-
-      {props.showBottomInfo && (
-        <div className="p-3">
-          <h3 className="line-clamp-1 text-center font-semibold text-gray-900">
-            {props.movie.title}
-          </h3>
+    <div className="vhs-card" style={{ width: "100%" }}>
+      <div className="vhs-spine" />
+      <div style={{ paddingLeft: 14 }}>
+        <div className="poster">
+          {movie.posterUrl ? (
+            <img
+              src={movie.posterUrl}
+              alt={`Poster for ${movie.title}`}
+            />
+          ) : (
+            <>
+              <div className="poster-stripes" />
+              <span className="poster-label">{movie.title}</span>
+            </>
+          )}
         </div>
-      )}
+        {showBottomInfo && (
+          <div
+            style={{
+              padding: size === "sm" ? "6px 8px" : "8px 10px",
+              borderTop: "1px solid var(--line)",
+            }}
+          >
+            <p
+              className="font-mono"
+              style={{
+                fontSize: size === "sm" ? 11 : 12,
+                color: "var(--label-dim)",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {movie.title}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

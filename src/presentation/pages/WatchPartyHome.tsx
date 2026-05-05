@@ -27,36 +27,37 @@ export default function WatchPartyHome() {
 
   return (
     <PageContainer>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Watch Party</h1>
-        <Link
-          to="/admin/watch-party/upload"
-          className="rounded border border-slate-800 px-4 py-2 text-sm hover:bg-slate-50"
-        >
-          Upload New Movie
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+        <div className="section-title" style={{ margin: 0 }}>
+          <span className="num">CH 77</span>
+          Watch Party
+        </div>
+        <Link to="/admin/watch-party/upload" className="btn btn-sm btn-ghost">
+          Upload Movie
         </Link>
       </div>
 
       {transmission ? (
-        <div className="space-y-4">
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <TransmissionStatusCard transmission={transmission} />
           <Form method="post">
-            <button
-              type="submit"
-              className="rounded bg-red-600 px-6 py-2 text-white hover:bg-red-700"
-            >
-              Stop Transmission
+            <button type="submit" className="btn btn-red btn-sm">
+              ■ Stop Transmission
             </button>
           </Form>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <p className="mb-6 text-gray-500">No active transmission.</p>
-          <Link
-            to="/admin/watch-party/new"
-            className="rounded bg-slate-800 px-6 py-3 text-white hover:bg-slate-700"
-          >
-            Create New Transmission
+        <div
+          className="dashed-box"
+          style={{ textAlign: "center", padding: "60px 24px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}
+        >
+          <div className="static-bg" style={{ width: 80, height: 60 }} />
+          <p className="font-crt" style={{ fontSize: 20, color: "var(--amber)", letterSpacing: "0.1em" }}>
+            NO ACTIVE TRANSMISSION
+          </p>
+          <p className="muted" style={{ fontSize: 13 }}>No live stream is currently running.</p>
+          <Link to="/admin/watch-party/new" className="btn btn-primary">
+            ▶ Create Transmission
           </Link>
         </div>
       )}

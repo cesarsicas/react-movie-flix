@@ -10,21 +10,25 @@ export default function TransmissionStatusCard({ transmission }: Props) {
   const durationLabel = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-      <div className="mb-4 flex items-center gap-3">
-        <span className="rounded bg-red-600 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-white">
-          LIVE
-        </span>
-        <h2 className="text-xl font-semibold">{transmission.movieName}</h2>
+    <div className="panel" style={{ padding: 20 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+        <span className="rec-dot" />
+        <span className="font-crt" style={{ fontSize: 16, color: "var(--red)", letterSpacing: "0.1em" }}>LIVE</span>
+        <span style={{ fontSize: 16, fontWeight: 600 }}>{transmission.movieName}</span>
       </div>
-      <div className="space-y-1 text-sm text-gray-600">
-        <p>
-          <span className="font-medium">Started:</span>{" "}
-          {new Date(transmission.startTime).toLocaleString()}
-        </p>
-        <p>
-          <span className="font-medium">Duration:</span> {durationLabel}
-        </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <div
+          style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderBottom: "1px dashed var(--line)", fontSize: 13 }}
+        >
+          <span className="muted">Started</span>
+          <span>{new Date(transmission.startTime).toLocaleString()}</span>
+        </div>
+        <div
+          style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", fontSize: 13 }}
+        >
+          <span className="muted">Duration</span>
+          <span className="font-crt" style={{ fontSize: 16 }}>{durationLabel}</span>
+        </div>
       </div>
     </div>
   );

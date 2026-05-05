@@ -1,10 +1,13 @@
-const HomeSection: React.FC<React.PropsWithChildren<{ title: string }>> = (
-  props,
-) => {
+const HomeSection: React.FC<
+  React.PropsWithChildren<{ title: string; channelNum?: string }>
+> = ({ title, channelNum, children }) => {
   return (
-    <div className="mb-8 bg-gray-100 p-8">
-      <h2 className="mb-6 text-2xl font-bold text-gray-800">{props.title}</h2>
-      {props.children}
+    <div style={{ marginBottom: 40 }}>
+      <div className="section-title">
+        {channelNum && <span className="num">{channelNum}</span>}
+        {title}
+      </div>
+      {children}
     </div>
   );
 };

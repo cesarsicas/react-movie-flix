@@ -7,14 +7,24 @@ import signUpUseCase from "../../domain/usecases/signUpUseCase";
 export function Auth() {
   return (
     <PageContainer>
-      <AuthForm />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: 480,
+          padding: "40px 0",
+        }}
+      >
+        <div style={{ width: "100%", maxWidth: 440 }}>
+          <AuthForm />
+        </div>
+      </div>
     </PageContainer>
   );
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  console.log("Auth form action called");
-
   const searchParams = new URL(request.url).searchParams;
   const mode = searchParams.get("mode") || "login";
 
@@ -26,18 +36,18 @@ export async function action({ request }: ActionFunctionArgs) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
-  if (mode == "signup") {
+  if (mode === "signup") {
     try {
       signUpUseCase(email, password);
       return { success: "User created with success!" };
-    } catch (error) {
+    } catch {
       return { errors: ["Could not register user"] };
     }
   } else {
     try {
       await loginUseCase(email, password);
       return redirect("/profile");
-    } catch (error) {
+    } catch {
       return { errors: ["Could not authenticate user"] };
     }
   }

@@ -7,54 +7,57 @@ interface ModalProps extends React.PropsWithChildren {
   title: string;
 }
 
-const Modal: React.FC<ModalProps> = (props) => {
-  if (!props.isOpen) return null;
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
 
   const modalRoot = document.getElementById("modal-root");
-
   if (!modalRoot) {
-    console.error(
-      "The element with id 'modal-root' was not found. The modal cannot be rendered.",
-    );
+    console.error("Element with id 'modal-root' not found.");
     return null;
   }
 
   return ReactDOM.createPortal(
     <div
-      className="bg-opacity-50 bg-opacity-70 fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-      onClick={props.onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 50,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "rgba(14,13,10,0.88)",
+        backdropFilter: "blur(4px)",
+        padding: 16,
+      }}
+      onClick={onClose}
     >
       <div
-        className="w-full max-w-xl scale-100 transform overflow-hidden rounded-lg bg-white opacity-100 shadow-xl transition-all duration-300 ease-out"
+        className="panel"
+        style={{
+          width: "100%",
+          maxWidth: 560,
+          overflow: "hidden",
+          boxShadow: "6px 6px 0 rgba(0,0,0,0.5)",
+        }}
         onClick={(e) => e.stopPropagation()}
       >
-        {props.title && (
-          <div className="flex items-center justify-between border-b border-gray-200 p-4">
-            <h2 className="text-xl font-semibold text-gray-900">
-              {props.title}
-            </h2>
+        {/* Channel strip header */}
+        {title && (
+          <div className="channel-strip">
+            <span className="font-crt" style={{ color: "var(--amber)" }}>◈</span>
+            <span>{title}</span>
             <button
-              onClick={props.onClose}
-              className="text-2xl leading-none text-gray-400 transition-colors hover:text-gray-600"
+              onClick={onClose}
+              className="btn btn-sm btn-ghost"
+              style={{ padding: "2px 8px" }}
               aria-label="Close"
             >
-              &times;
+              ✕
             </button>
           </div>
         )}
 
-        <div className="p-4">{props.children}</div>
-
-        {/*
-        <div className="p-4 border-t border-gray-200 flex justify-end space-x-2">
-            <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200" onClick={props.onClose}>
-                Cancel
-            </button>
-            <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-                Save
-            </button>
-        </div>
-        */}
+        <div style={{ padding: 20 }}>{children}</div>
       </div>
     </div>,
     modalRoot,

@@ -1,19 +1,36 @@
 import type ReviewModel from "../../domain/model/ReviewModel";
-import { UserAvatar } from "./UserAvatar";
 
 const MoviewReviewItem: React.FC<
   React.PropsWithChildren<{ movie: ReviewModel }>
-> = (props) => {
+> = ({ movie }) => {
   return (
-    <div className="mb-4 rounded-md border-1 border-solid border-gray-300 p-4">
-      <div className="mb-2 flex items-center">
-        <UserAvatar />
-        <div className="mx-2">
-          <p>{props.movie.defaultUserName}</p>
-          <p className="text-xs text-gray-500">2024-09-14</p>
+    <div
+      className="panel"
+      style={{ padding: 16, marginBottom: 10 }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+        <div
+          style={{
+            width: 32,
+            height: 32,
+            background: "var(--bg-3)",
+            border: "1px solid var(--line-strong)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 14,
+            color: "var(--amber)",
+            flexShrink: 0,
+          }}
+        >
+          ◈
+        </div>
+        <div>
+          <p style={{ fontSize: 13, fontWeight: 600 }}>{movie.defaultUserName}</p>
+          <p className="font-crt muted" style={{ fontSize: 13 }}>2024-09-14</p>
         </div>
       </div>
-      <p className="text-sm text-gray-500">{props.movie.review}</p>
+      <p className="muted" style={{ fontSize: 13, lineHeight: 1.6 }}>{movie.review}</p>
     </div>
   );
 };

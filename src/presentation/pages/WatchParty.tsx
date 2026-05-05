@@ -67,25 +67,114 @@ export default function WatchParty() {
 
   return (
     <PageContainer>
-      <h1 className="mb-6 text-3xl font-bold">Watch Party</h1>
+      {/* Channel header */}
+      <div className="channel-strip" style={{ marginBottom: 24 }}>
+        <span className="font-crt" style={{ color: "var(--amber)" }}>CH 77</span>
+        <span>WATCH PARTY · LIVE STREAM</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {transmission && (
+            <>
+              <span className="rec-dot" />
+              <span className="font-crt" style={{ fontSize: 14, color: "var(--red)" }}>LIVE</span>
+            </>
+          )}
+        </div>
+      </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-24 text-gray-500">
-          Loading...
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "80px 0",
+            gap: 16,
+          }}
+        >
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <div className="tape-reel" />
+            <div className="tape-reel" />
+          </div>
+          <p className="font-crt muted" style={{ fontSize: 18, letterSpacing: "0.1em" }}>
+            LOADING…
+          </p>
         </div>
       ) : transmission ? (
-        <div>
-          <HlsPlayer streamUrl={STREAM_URL} />
-          <div className="space-y-1">
-            <h2 className="text-2xl font-semibold">{transmission.movieName}</h2>
-            <p className="text-sm text-gray-500">
-              Live for {formatElapsed(elapsed)}
-            </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 24, alignItems: "start" }}>
+          <div>
+            {/* CRT-framed player */}
+            <div className="crt" style={{ marginBottom: 16 }}>
+              <div className="tracking-line" />
+              <HlsPlayer streamUrl={STREAM_URL} />
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <div>
+                <p
+                  className="font-display"
+                  style={{ fontSize: 22, color: "var(--label)", marginBottom: 4 }}
+                >
+                  {transmission.movieName}
+                </p>
+                <p className="font-crt muted" style={{ fontSize: 16 }}>
+                  LIVE FOR {formatElapsed(elapsed).toUpperCase()}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Signal panel */}
+          <div className="panel" style={{ padding: 16, minWidth: 160 }}>
+            <div className="section-title" style={{ fontSize: 11 }}>Signal</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div>
+                <p className="muted" style={{ fontSize: 11, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                  Video
+                </p>
+                <div className="vu-bar">
+                  {Array(8).fill(null).map((_, i) => (
+                    <span key={i} className={i < 6 ? "on" : i === 7 ? "peak" : ""} style={{ height: `${40 + i * 8}%` }} />
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="muted" style={{ fontSize: 11, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                  Audio
+                </p>
+                <div className="vu-bar">
+                  {Array(8).fill(null).map((_, i) => (
+                    <span key={i} className={i < 5 ? "on" : ""} style={{ height: `${30 + i * 10}%` }} />
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                <div className="tape-reel" style={{ width: 28, height: 28 }} />
+                <div className="tape-reel" style={{ width: 28, height: 28 }} />
+              </div>
+            </div>
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center py-24">
-          <p className="text-gray-500">No live stream right now. Check back later!</p>
+        <div
+          className="dashed-box"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "80px 0",
+            gap: 16,
+            textAlign: "center",
+          }}
+        >
+          <div className="static-bg" style={{ width: 120, height: 80, marginBottom: 8 }} />
+          <p className="font-crt" style={{ fontSize: 22, color: "var(--amber)", letterSpacing: "0.1em" }}>
+            NO SIGNAL
+          </p>
+          <p className="muted" style={{ fontSize: 13 }}>
+            No live stream right now. Check back later!
+          </p>
         </div>
       )}
     </PageContainer>
